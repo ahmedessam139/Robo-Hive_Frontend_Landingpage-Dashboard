@@ -2,26 +2,60 @@
 @tailwind components;
 @tailwind utilities;
 
+
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --foreground-color: #f0e9e9;
+  --background-start-color: #D6DBDC;
+  --background-end-color: #FFFFFF;
+  --primary-color: #2196F3; /* Blue color */
+  --blue-1: #014474;
+  --blue-2: #176B87;
+  --blue-3: #64a6cc;
+  --blue-4: #e3e7e770;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --foreground-color: #FFFFFF;
+    --background-start-color: #fffbfb;
+    --background-end-color: #ffffff;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color); /* Use the primary color as scrollbar thumb color */
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-color); /* Use the primary color as scrollbar thumb color */
+}
+
+
+
+/* Example usage of the additional colors */
+.my-element {
+  background-color: var(--color-1); /* Use the color #001C30 */
+  color: var(--color-2); /* Use the color #176B87 */
+  border-color: var(--color-3); /* Use the color #64CCC5 */
+}
+
+.another-element {
+  color: var(--color-4); /* Use the color #DAFFFB */
 }
