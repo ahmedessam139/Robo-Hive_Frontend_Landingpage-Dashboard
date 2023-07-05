@@ -1,62 +1,63 @@
-import axios from "axios";
+import axios from "../../../../utils/axios";
 import Counters from "./Counters";
 import Package_Table from "./Package_Table";
 import Footer from "@/components/Common/Footer";
+import Loader from "@/components/Common/Loader";
 import { useEffect, useRef, useState } from "react";
 
-const getData = async () => {
-    try {
-        const res = await axios.get('http://34.155.103.216/api/packages/user/');
-    console.log(res);
-    } catch (err) {
-        console.log(err)
-    }
-}
-
 const Package = () => {
-    const packageData = {
-        "counters": {
+    const [packageData, setPackageData] = useState();
+
+    const getData = async () => {
+        try {
+            const res = await axios.get('/api/packages/user/');
+            setPackageData(res.data);
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    // const packageData = {
+    //     "counters": {
             
-            "packagesNumber": 23,
-            "packagesWithJobs": 12,
-            "dailyPackages": 11,
-        },
-        "packages": [
-            {
-                "packageId": 1,
-                "packageName": "Package 1",
-                "description": "Description 1",
-                "createdDate": "2021-07-01",
-                "downloadUrl": "https://www.google.com",
+    //         "packagesNumber": 23,
+    //         "packagesWithJobs": 12,
+    //         "dailyPackages": 11,
+    //     },
+    //     "packages": [
+    //         {
+    //             "packageId": 1,
+    //             "packageName": "Package 1",
+    //             "description": "Description 1",
+    //             "createdDate": "2021-07-01",
+    //             "downloadUrl": "https://www.google.com",
                 
-            },
-            {
-                "packageId": 4,
-                "packageName": "Package 1",
-                "description": "Description 2",
-                "createdDate": "2021-07-02",
-                "downloadUrl": "https://www.google.com",
-            },
-            {
-                "packageId": 3,
-                "packageName": "Package 3",
-                "description": "Description 3",
-                "createdDate": "2021-07-03",
-                "downloadUrl": "https://www.google.com",
-            },
-            {
-                "packageId": 4,
-                "packageName": "Package 4",
-                "description": "Description 4",
-                "createdDate": "2021-07-04",
-                "downloadUrl": "https://www.google.com",
-            },
-        ]
+    //         },
+    //         {
+    //             "packageId": 4,
+    //             "packageName": "Package 1",
+    //             "description": "Description 2",
+    //             "createdDate": "2021-07-02",
+    //             "downloadUrl": "https://www.google.com",
+    //         },
+    //         {
+    //             "packageId": 3,
+    //             "packageName": "Package 3",
+    //             "description": "Description 3",
+    //             "createdDate": "2021-07-03",
+    //             "downloadUrl": "https://www.google.com",
+    //         },
+    //         {
+    //             "packageId": 4,
+    //             "packageName": "Package 4",
+    //             "description": "Description 4",
+    //             "createdDate": "2021-07-04",
+    //             "downloadUrl": "https://www.google.com",
+    //         },
+    //     ]
         
 
-    }
-
-
+    // }
 
     const [showFeatures, setShowFeatures] = useState(false);
     const featuresRef = useRef(null);
@@ -93,15 +94,21 @@ const Package = () => {
         transition: 'margin-top 700ms  ease-out, opacity 700ms ease-out',
     };
 
-    return (
+    if (packageData) {
+        return (
 
-        <div  style={containerStyle} ref={featuresRef}>
-            <Counters counters={packageData.counters} />
-            <Package_Table packages={packageData.packages} />
-            <Footer />
-        </div>
-
-    );
+            <div  style={containerStyle} ref={featuresRef}>
+                <Counters counters={packageData.counters} />
+                <Package_Table packages={packageData.packages} />
+                <Footer />
+            </div>
+    
+        );
+    } else {
+        return (
+            <Loader />
+        )
+    }
 
 }
 

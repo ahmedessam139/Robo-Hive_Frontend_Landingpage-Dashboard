@@ -15,7 +15,6 @@ instance.interceptors.request.use(config => {
 
 // Log the response to the console
 instance.interceptors.response.use(response => {
-  console.log(response.data);
   if (response.status === 401) {
     signOut();
   }
