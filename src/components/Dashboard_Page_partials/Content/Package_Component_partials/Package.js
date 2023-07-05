@@ -6,7 +6,7 @@ import Loader from "@/components/Common/Loader";
 import { useEffect, useRef, useState } from "react";
 
 const Package = () => {
-    const [packageData, setPackageData] = useState();
+    const [packageData, setPackageData] = useState(null);
 
     const getData = async () => {
         try {
@@ -16,48 +16,6 @@ const Package = () => {
             console.log(err)
         }
     }
-
-    // const packageData = {
-    //     "counters": {
-            
-    //         "packagesNumber": 23,
-    //         "packagesWithJobs": 12,
-    //         "dailyPackages": 11,
-    //     },
-    //     "packages": [
-    //         {
-    //             "packageId": 1,
-    //             "packageName": "Package 1",
-    //             "description": "Description 1",
-    //             "createdDate": "2021-07-01",
-    //             "downloadUrl": "https://www.google.com",
-                
-    //         },
-    //         {
-    //             "packageId": 4,
-    //             "packageName": "Package 1",
-    //             "description": "Description 2",
-    //             "createdDate": "2021-07-02",
-    //             "downloadUrl": "https://www.google.com",
-    //         },
-    //         {
-    //             "packageId": 3,
-    //             "packageName": "Package 3",
-    //             "description": "Description 3",
-    //             "createdDate": "2021-07-03",
-    //             "downloadUrl": "https://www.google.com",
-    //         },
-    //         {
-    //             "packageId": 4,
-    //             "packageName": "Package 4",
-    //             "description": "Description 4",
-    //             "createdDate": "2021-07-04",
-    //             "downloadUrl": "https://www.google.com",
-    //         },
-    //     ]
-        
-
-    // }
 
     const [showFeatures, setShowFeatures] = useState(false);
     const featuresRef = useRef(null);
@@ -84,10 +42,7 @@ const Package = () => {
                 observer.unobserve(featuresRef.current);
             }
         };
-    }, []);
-
-
-
+    }, [packageData]);
 
     const containerStyle = {
         opacity: showFeatures ? '1' : '0',
@@ -99,7 +54,7 @@ const Package = () => {
 
             <div  style={containerStyle} ref={featuresRef}>
                 <Counters counters={packageData.counters} />
-                <Package_Table packages={packageData.packages} />
+                <Package_Table packages={packageData.packages} getData={getData} />
                 <Footer />
             </div>
     

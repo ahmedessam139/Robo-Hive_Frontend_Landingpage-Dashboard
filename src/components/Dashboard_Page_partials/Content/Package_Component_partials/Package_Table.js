@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import axios from "../../../../utils/axios";
+import React, { useEffect, useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button } from '@mui/material';
 import { confirmAlert } from 'react-confirm-alert';
 import { RiDownloadCloudLine } from 'react-icons/ri';
@@ -6,7 +7,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import { FaSearchengin, FaCircle, FaCheckCircle, FaFileExcel, FaBan, FaTrashAlt, FaStopCircle, FaEdit, } from 'react-icons/fa';
 import { CSVLink } from 'react-csv';
 
-const Package_Table = ({ packages }) => {
+const Package_Table = ({ packages, getData }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [showPopup, setShowPopup] = useState(false);
     const [packageIdToUpdate, setPackageIdToUpdate] = useState(null);
@@ -58,7 +59,8 @@ const Package_Table = ({ packages }) => {
                             packageId: packageId,
                             status: 'Deleted',
                         };
-                        // Perform delete action here
+                        axios.delete(`/api/packages/${packageId}`);
+                        getData();
                     },
                 },
                 {
@@ -71,7 +73,7 @@ const Package_Table = ({ packages }) => {
         });
     };
 
-    const handleUpdate = (packageId) => {
+    const handleUpdate = async (packageId) => {
         console.log('Update package with ID:', packageId);
         setShowPopup(true);
         setPackageIdToUpdate(packageId);
@@ -88,10 +90,13 @@ const Package_Table = ({ packages }) => {
 
         // Perform update action here
         const payload = {
-            packageName: updatedData.packageName,
+            name: updatedData.packageName,
             description: updatedData.description,
         };
 
+        (async () => {
+            let res = await axios.put(`/api/packages/${packageId}`, payload)
+        })()
     };
 
     const handleClosePopup = () => {
@@ -107,8 +112,6 @@ const Package_Table = ({ packages }) => {
 
     const handleFormSubmit = () => {
         // Perform update action using the updatedData state and packageIdToUpdate
-        console.log('Updated data:', updatedData);
-        console.log('Package ID to update:', packageIdToUpdate);
         // Close the popup form
         handleClosePopup();
     };
