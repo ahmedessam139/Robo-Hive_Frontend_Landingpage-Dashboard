@@ -2,6 +2,7 @@ import React, { useState, useEffect, use } from 'react';
 import { Suspense } from 'react';
 import { GoSidebarExpand } from 'react-icons/go';
 import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 import Sidebar from '../../components/Dashboard_Page_partials/Sidebar/Sidebar';
 import styles from './Dashboard.module.css';
 import Loader from '../../components/Common/Loader';
@@ -17,6 +18,11 @@ const Dashboard = () => {
   const router = useRouter();
   const [sideToggle, setSideToggle] = useState(false);
   const [title, setTitle] = useState(router.query.route);
+  const {data: session} = useSession();
+
+  if (!session) {
+    router.push('/');
+  }
 
   const route = router.query.route;
   console.log(route);

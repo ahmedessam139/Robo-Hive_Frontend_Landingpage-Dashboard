@@ -13,18 +13,18 @@ export default function Home() {
 
   if (session) {
     router.push("/dashboard/home");
+  } else {
+    return (
+      <>
+        <div>
+          <Navbar />
+          <Hero />
+          <Features />
+          <Video />
+          <Contact />
+          <Footer />
+        </div>
+      </>
+    )
   }
-
-  return (
-    <>
-      <div>
-        <Navbar />
-        <Hero />
-        <Features />
-        <Video />
-        <Contact />
-        <Footer />
-      </div>
-    </>
-  )
 }

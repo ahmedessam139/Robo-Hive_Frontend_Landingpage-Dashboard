@@ -1,7 +1,17 @@
+import axios from "axios";
 import Counters from "./Counters";
 import Package_Table from "./Package_Table";
 import Footer from "@/components/Common/Footer";
 import { useEffect, useRef, useState } from "react";
+
+const getData = async () => {
+    try {
+        const res = await axios.get('http://34.155.103.216/api/packages/user/');
+    console.log(res);
+    } catch (err) {
+        console.log(err)
+    }
+}
 
 const Package = () => {
     const packageData = {
@@ -46,8 +56,14 @@ const Package = () => {
 
     }
 
+
+
     const [showFeatures, setShowFeatures] = useState(false);
     const featuresRef = useRef(null);
+
+    useEffect(() => {
+        getData();
+    }, [])
 
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {

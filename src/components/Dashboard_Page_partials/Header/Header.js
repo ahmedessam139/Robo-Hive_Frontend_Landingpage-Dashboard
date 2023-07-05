@@ -3,8 +3,11 @@ import { AiOutlineMenu } from 'react-icons/ai';
 import { GoSidebarExpand } from 'react-icons/go';
 import { Avatar, Menu, MenuItem } from '@mui/material';
 import { RiArrowDropDownLine } from 'react-icons/ri';
+import { useRouter } from "next/router";
+import { signOut } from 'next-auth/react';
 
 export default function Header({ title, sideToggle, setSideToggle }) {
+  const router = useRouter();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleMenuOpen = (event) => {
@@ -19,6 +22,8 @@ export default function Header({ title, sideToggle, setSideToggle }) {
     // Add logout logic here (e.g., clearing auth token, user data, etc.)
     // For example, you can redirect to the login page after logging out:
     // history.push('/login');
+    signOut({callbackUrl: "/"});
+    router.push('/');
   };
 
   return (

@@ -3,7 +3,7 @@ import { getSessionToken } from './sessionStorage';
 import { signOut } from 'next-auth/react';
 
 const instance = axios.create({
-  baseURL: 'https://daef5940-bcee-43b1-98de-d22dd88f86d0.mock.pstmn.io',
+  baseURL: 'http://34.155.103.216',
 });
 
 // Add a custom header to every request
