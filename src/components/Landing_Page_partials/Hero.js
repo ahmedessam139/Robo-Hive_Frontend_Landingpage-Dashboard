@@ -3,6 +3,7 @@ import Typography from '@mui/material/Typography';
 import Typed from 'react-typed';
 import { FaStar } from 'react-icons/fa';
 import { BiLogInCircle } from 'react-icons/bi';
+import { signIn } from 'next-auth/react';
 
 export default function Hero() {
 
@@ -26,7 +27,11 @@ export default function Hero() {
                                     Robo Hive is a startup dedicated to leveraging Robotic Process Automation (RPA) to transform and streamline your business operations. Our cutting-edge solutions will revolutionize your processes and supercharge your efficiency.
                                 </Typography>
                                 <div className="flex flex-col items-center justify-center space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0 mt-8">
-                                    <a href="https://your-get-started-link" target="_blank" rel="noopener noreferrer" className="flex items-center gap-x-2 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 font-medium transition-all duration-700">
+                                    <a href="#" target="_blank" rel="noopener noreferrer" className="flex items-center gap-x-2 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 font-medium transition-all duration-700" 
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            signIn("keycloak", { callbackUrl: "/" });
+                                        }}>
                                     <BiLogInCircle className="inline-block" />
                                     Get Started
                                     </a>

@@ -2,7 +2,8 @@ import { useState } from "react";
 import { FaSignInAlt, FaKey, FaUser, FaSignOutAlt, FaCog, FaDownload } from "react-icons/fa";
 import { IoMenu } from "react-icons/io5";
 import { useRouter } from "next/router";
-import {BiLogInCircle} from "react-icons/bi";
+import { BiLogInCircle } from "react-icons/bi";
+import { signIn } from 'next-auth/react';
 
 
 export default function Navbar() {
@@ -50,7 +51,11 @@ export default function Navbar() {
                     </a>
                 </li>
                 <li className="mx-3 my-2 md:m-3 backdrop-blur-sm">
-                    <button type="button" className="flex items-center gap-x-2 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 font-medium transition-all duration-700" onClick={() => router.push("/dashboard/home")}>
+                    <button type="button" className="flex items-center gap-x-2 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 font-medium transition-all duration-700" 
+                        onClick={(e) => {
+                            e.preventDefault();
+                            signIn("keycloak", { callbackUrl: "/" });
+                        }}>
                     <BiLogInCircle className="inline-block" />
     
                     <span className="font-2xl">Get Started</span>
