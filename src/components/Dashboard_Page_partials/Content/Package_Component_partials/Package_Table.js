@@ -88,7 +88,6 @@ const Package_Table = ({ packages }) => {
 
         // Perform update action here
         const payload = {
-            packageId: packageId,
             packageName: updatedData.packageName,
             description: updatedData.description,
         };
@@ -230,7 +229,6 @@ const Package_Table = ({ packages }) => {
                 <DialogActions margin='dense'>
                 <Button onClick={handleClosePopup}>Cancel</Button>
                 <button type="button" className="flex items-center gap-x-2 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 font-medium transition-all duration-700" onClick={handleFormSubmit}>
-      
                 <span className="font-2xl">Update</span>
                 </button>
                 </DialogActions>

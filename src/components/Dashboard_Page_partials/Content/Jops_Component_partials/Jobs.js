@@ -4,14 +4,49 @@ import Counters from './Counters';
 import Jobs_Table from './Jobs_Table';
 import Footer from "@/components/Common/Footer";
 
+
 const Jobs = () => {
-    const jopsData = {
+    const jobsData = {
         "counters": {
             "jobs": 23,
             "pending": 12,
             "executed": 11,
             "failed": 6,
         },
+        "packages": [ {
+            "packageId": 1,
+            "packageName": "Package 1",
+            "description": "Description 1",
+            "createdDate": "2021-07-01",
+            "downloadUrl": "https://www.google.com",
+            
+        },
+        {
+            "packageId": 4,
+            "packageName": "Package 2",
+            "description": "Description 2",
+            "createdDate": "2021-07-02",
+            "downloadUrl": "https://www.google.com",
+        },
+        ],
+
+        "robots": [
+            {
+                "robotId": 1,
+                "robotAddress": '12.235.2.2',
+                "joinedAt": "2021-07-01T00:00:00.000Z",
+                "status": "connected"
+
+            },
+            {
+                "robotId": 2,
+                "robotAddress": '243.34.34.4',
+                "joinedAt": "2021-07-01T00:00:00.000Z",
+                "status": "disconnected"
+
+            },
+        ],
+
         "jobs": [
             {
                 "id": 1,
@@ -68,8 +103,8 @@ const Jobs = () => {
 
     return (
         <div ref={featuresRef} style={containerStyle}>
-            <Counters counters={jopsData.counters} />
-            <Jobs_Table jobs={jopsData.jobs} />
+            <Counters counters={jobsData.counters} />
+            <Jobs_Table jobs={jobsData.jobs} robots={jobsData.robots} packages={jobsData.packages} />
             <Footer />
         </div>
     );

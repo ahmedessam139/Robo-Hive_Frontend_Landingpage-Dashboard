@@ -3,28 +3,29 @@ import Machines_Donut from "./Machines_Donut";
 import { useEffect, useRef, useState } from "react";
 import Jobs_Charts from "./Jops_Charts";
 import Footer from "@/components/Common/Footer";
+import axios from "../../../../utils/axios";
 
 
 export default function Home() {
-    const homeData = {
-        "counters": {
-            "jobs": 23,
-            "packages": 45,
-            "machines": 33,
-        },
-        "jobs": {
-            "total": 29,
-            "pending": 12,
-            "Executed": 11,
-            "failed": 6,
-        },
-        "machines": {
-            "connected": 12,
-            "disconnected": 21,
-        },
-    }
+    const [homeData, setHomeData] = useState(null);
     const [showFeatures, setShowFeatures] = useState(false);
     const featuresRef = useRef(null);
+
+    const getHomeData = async () => {
+        try {
+            
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        getHomeData();
+    }, []);
+
+
+
 
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
@@ -53,7 +54,9 @@ export default function Home() {
         opacity: showFeatures ? '1' : '0',
         transition: 'margin-top 700ms  ease-out, opacity 700ms ease-out',
     };
-
+if (!homeData) {
+    return <div>Loading...</div>;
+}else {
     return (
         <div ref={featuresRef} style={containerStyle}>
             <Counters counters={homeData.counters} />
@@ -68,5 +71,6 @@ export default function Home() {
             <Footer />
         </div>
     );
+}
 
 }

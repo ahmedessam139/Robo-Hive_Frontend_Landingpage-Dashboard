@@ -1,20 +1,48 @@
 import React, { useState } from 'react';
-import { TextField } from '@mui/material';
 import { confirmAlert } from 'react-confirm-alert';
-import 'react-confirm-alert/src/react-confirm-alert.css';
-import {
-  FaSearchengin,
-  FaCircle,
-  FaCheckCircle,
-  FaFileExcel,
-  FaBan,
-  FaTrashAlt,
-  FaStopCircle,
-} from 'react-icons/fa';
+import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { FaSearchengin, FaCircle, FaCheckCircle, FaFileExcel, FaBan, FaTrashAlt, FaStopCircle, FaPlus } from 'react-icons/fa';
 import { CSVLink } from 'react-csv';
 
-const Jobs_Table = ({ jobs }) => {
+const Jobs_Table = ({ jobs, robots, packages }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
+  const [selectedRobot, setSelectedRobot] = useState('');
+  const [selectedPackage, setSelectedPackage] = useState('');
+  const [selectedTime, setSelectedTime] = useState('');
+  const [selectedDate, setSelectedDate] = useState('');
+
+  const handleCreateJob = () => {
+    // Perform job creation with the selected values here
+    console.log('Robot:', selectedRobot);
+    console.log('Package:', selectedPackage);
+    console.log('Time:', selectedTime);
+    console.log('Date:', selectedDate);
+
+    const payload = {
+      "roboyId": selectedRobot,
+      "packageId": selectedPackage,
+      "time": selectedTime,
+      "date": selectedDate,
+    };
+
+
+    // Close the popup after job creation
+    setShowPopup(false);
+  };
+
+  const handleOpenPopup = () => {
+    setShowPopup(true);
+  };
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
+    setSelectedRobot('');
+    setSelectedPackage('');
+    setSelectedTime('');
+    setSelectedDate('');
+    
+  };
 
   const headers = [
     { label: 'ID', key: 'id' },
@@ -32,18 +60,18 @@ const Jobs_Table = ({ jobs }) => {
     action: '',
   }));
 
-  const filterJobs = jobs.filter(job => {
+  const filterJobs = jobs.filter((job) => {
     return (
       job.robotName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       job.packageName.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
 
-  const handleSearchTermChange = event => {
+  const handleSearchTermChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  const handleDelete = jobId => {
+  const handleDelete = (jobId) => {
     confirmAlert({
       title: 'Confirm Delete',
       message: `Sure you want to delete this job with ID (${jobId})?`,
@@ -56,7 +84,7 @@ const Jobs_Table = ({ jobs }) => {
               id: jobId,
               status: 'Deleted',
             };
-            
+
             // Perform delete action here
           },
         },
@@ -69,7 +97,8 @@ const Jobs_Table = ({ jobs }) => {
       ],
     });
   };
-  const handleStop = jobId => {
+
+  const handleStop = (jobId) => {
     confirmAlert({
       title: 'Confirm Stop',
       message: `Sure you want to stop this job with ID (${jobId})?`,
@@ -101,6 +130,12 @@ const Jobs_Table = ({ jobs }) => {
         <div className="flex flex-col md:flex-row md:justify-between mb-2 items-center ">
           <p className="mb-2 text-3xl text-gray-500">Jobs</p>
           <div className="flex  justify-end p-2">
+            <button
+              className="bg-red-400 hover:bg-red-600 mr-3 text-white font-bold py-2 px-4 rounded-full"
+              onClick={handleOpenPopup}
+            >
+              Create Job <FaPlus className="inline-block " />
+            </button>
             <TextField
               label="Search Jobs"
               sx={TextFieldStyle}
@@ -114,13 +149,7 @@ const Jobs_Table = ({ jobs }) => {
               }}
             />
 
-            <CSVLink
-              data={csvData}
-              headers={headers}
-              filename={'jobs.csv'}
-              className="ml-2"
-              target="_blank"
-            >
+            <CSVLink data={csvData} headers={headers} filename={'jobs.csv'} className="ml-2" target="_blank">
               <FaFileExcel size={53} className="text-green-800" />
             </CSVLink>
           </div>
@@ -139,7 +168,7 @@ const Jobs_Table = ({ jobs }) => {
             </thead>
 
             <tbody className="text-gray-600 text-sm font-light">
-              {filterJobs.map(job => (
+              {filterJobs.map((job) => (
                 <tr key={job.id} className="border-b border-gray-200 hover:bg-gray-100">
                   <td className="py-3 px-6 text-center">{job.id}</td>
                   <td className="py-3 px-6 text-center">{job.robotName}</td>
@@ -182,6 +211,55 @@ const Jobs_Table = ({ jobs }) => {
           </table>
         </div>
       </div>
+      <Dialog open={showPopup} onClose={handleClosePopup} maxWidth="sm" fullWidth pading="2rem">
+        <DialogTitle>Create Job</DialogTitle>
+        <DialogContent>
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <InputLabel>Robot</InputLabel>
+            <Select value={selectedRobot} onChange={(e) => setSelectedRobot(e.target.value)} margin='dense'>
+              {robots.map((robot) => (
+                <MenuItem key={robot.robotId} value={robot.robotId}>
+                  {robot.robotAddress}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <InputLabel>Package</InputLabel>
+            <Select value={selectedPackage} onChange={(e) => setSelectedPackage(e.target.value)} margin='dense'>
+              {packages.map((package_) => (
+                <MenuItem key={package_.packageId} value={package_.packageId}>
+                  {package_.packageName}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <TextField
+            label="Time"
+            type="time"
+            margin='dense'
+            value={selectedTime}
+            onChange={(e) => setSelectedTime(e.target.value)}
+            fullWidth
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Date"
+            type="date"
+            margin='dense'
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
+            fullWidth
+            sx={{ mb: 2 }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClosePopup}>Cancel</Button>
+          <button type="button" className="flex items-center gap-x-2 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 font-medium transition-all duration-700" onClick={handleCreateJob}>
+                <span className="font-2xl">Create</span>
+              </button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
