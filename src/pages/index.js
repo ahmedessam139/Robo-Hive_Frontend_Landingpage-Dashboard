@@ -5,26 +5,38 @@ import Video from "../components/Landing_Page_partials/Video"
 import Contact from "../components/Landing_Page_partials/Contact/Contact"
 import Footer from "../components/Common/Footer"
 import { useRouter } from "next/router";
-import { useSession } from 'next-auth/react';
+import { getSession } from 'next-auth/react';
 
 export default function Home() {
   const router = useRouter();
-  const {data: session} = useSession();
+
+  return (
+    <>
+      <div>
+        <Navbar />
+        <Hero />
+        <Features />
+        <Video />
+        <Contact />
+        <Footer />
+      </div>
+    </>
+  )
+}
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
 
   if (session) {
-    router.push("/dashboard/home");
-  } else {
-    return (
-      <>
-        <div>
-          <Navbar />
-          <Hero />
-          <Features />
-          <Video />
-          <Contact />
-          <Footer />
-        </div>
-      </>
-    )
+    return {
+      redirect: {
+        destination: "/dashboard/home",
+        permanent: false
+      }
+    }
+  }
+
+  return {
+    props: {}
   }
 }

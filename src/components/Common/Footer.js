@@ -10,7 +10,7 @@ const Footer = () => {
     <footer className="bg-white rounded-lg shadow mt-5  ">
       <div className="w-full md:py-2 bg-gray-100">
         <div className="sm:flex sm:items-center sm:justify-between">
-          <div class="flex justify-center items-center ">
+          <div className="flex justify-center items-center ">
             
             <div onClick={() => router.push("/")} className="flex items-center gap-x-3 cursor-pointer mx-3">
               <img src="/logos/main_logo.svg" width={150} alt="Logo" />

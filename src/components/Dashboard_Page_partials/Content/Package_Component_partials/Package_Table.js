@@ -94,9 +94,7 @@ const Package_Table = ({ packages, getData }) => {
             description: updatedData.description,
         };
 
-        (async () => {
-            let res = await axios.put(`/api/packages/${packageId}`, payload)
-        })()
+        
     };
 
     const handleClosePopup = () => {
@@ -112,6 +110,13 @@ const Package_Table = ({ packages, getData }) => {
 
     const handleFormSubmit = () => {
         // Perform update action using the updatedData state and packageIdToUpdate
+        const payload = {
+            name: updatedData.packageName,
+            description: updatedData.description,
+        };
+        (async () => {
+            let res = await axios.put(`/api/packages/${packageIdToUpdate}`, payload);
+        })()
         // Close the popup form
         handleClosePopup();
     };

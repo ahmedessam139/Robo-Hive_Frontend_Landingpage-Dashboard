@@ -7,7 +7,7 @@ import { FaPlus, FaSearchengin, FaFileExcel, FaTrashAlt, FaEdit } from 'react-ic
 import { CSVLink } from 'react-csv';
 
 
-const Tenants_Table = ({ tenants }) => {
+const Tenants_Table = ({ tenants , getData}) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showPopup, setShowPopup] = useState(false);
   const [tenantIdToUpdate, setTenantIdToUpdate] = useState(null);
@@ -53,7 +53,7 @@ const Tenants_Table = ({ tenants }) => {
   const handleDelete = (tenantId) => {
     confirmAlert({
       title: 'Confirm Delete',
-      message: `Are you sure you want to delete this tenant with ID (${tenantId})?`,
+      message: `Are you sure you want to delete this tenant with username: ${tenants.find((tenant) => tenant.tenantId === tenantId).username}?`,
       buttons: [
         {
           label: 'Yes',
@@ -65,8 +65,13 @@ const Tenants_Table = ({ tenants }) => {
             }
             console.log(payload);
             (async () => {
-              let res = await axios.delete('/api/authenticate/tenant', { data: payload });
-              console.log(res)
+              try {
+                let res = await axios.delete('/api/authenticate/tenant', { data: payload });
+                console.log(res);
+                getData();
+              } catch (error) {
+                console.log(error);
+              }
             })()
           },
         },
@@ -114,7 +119,7 @@ const Tenants_Table = ({ tenants }) => {
     // Perform update action using the updatedData state and tenantIdToUpdate
     console.log('Updated data:', updatedData);
     console.log('Tenant ID to update:', tenantIdToUpdate);
-     const payload = {
+    const payload = {
       "tenantId": 345,
       "username": "updatedData.username",
       "email": "updatedData.email",
@@ -138,7 +143,7 @@ const Tenants_Table = ({ tenants }) => {
       console.log(res)
       username = res.data.profile.username;
       password = res.data.profile.password;
-
+      getData();
       //Put the username and password in confirm alert
       confirmAlert({
         title: 'Confirm Add',
@@ -148,6 +153,7 @@ const Tenants_Table = ({ tenants }) => {
             label: 'Ok',
             onClick: () => {
               console.log('Add tenant with username:', username);
+              console.log(tenants);
             },
           },
 
@@ -209,10 +215,9 @@ const Tenants_Table = ({ tenants }) => {
         </div>
 
         <div className="bg-white shadow-md rounded my-6 overflow-x-auto">
-          <table className="min-w-max w-full table-auto">
+          <table className=" w-full table-auto">
             <thead>
               <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                <th className="py-3 px-6 text-center">ID</th>
                 <th className="py-3 px-6 text-center">Username</th>
                 <th className="py-3 px-6 text-center">Role</th>
                 <th className="py-3 px-6 text-center">Creation Time</th>
@@ -224,7 +229,6 @@ const Tenants_Table = ({ tenants }) => {
             <tbody className="text-gray-600 text-sm font-light">
               {filterTenants.map((tenant) => (
                 <tr key={tenant.tenantId} className="border-b border-gray-200 hover:bg-gray-100">
-                  <td className="py-3 px-6 text-center">{tenant.tenantId}</td>
                   <td className="py-3 px-6 text-center">{tenant.username}</td>
                   <td className="py-3 px-6 text-center">{tenant.role}</td>
                   <td className="py-3 px-6 text-center">{tenant.creationTime}</td>
@@ -295,7 +299,7 @@ const Tenants_Table = ({ tenants }) => {
           <Button onClick={handleClosePopup}>Cancel</Button>
           <button type="button" className="flex items-center gap-x-2 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 font-medium transition-all duration-700" onClick={handleFormSubmit}>
 
-          <span className="font-2xl">Update</span>
+            <span className="font-2xl">Update</span>
           </button>
         </DialogActions>
       </Dialog>

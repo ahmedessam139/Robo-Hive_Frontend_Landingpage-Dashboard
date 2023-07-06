@@ -5,10 +5,14 @@ import { Avatar, Menu, MenuItem } from '@mui/material';
 import { RiArrowDropDownLine } from 'react-icons/ri';
 import { useRouter } from "next/router";
 import { signOut } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 
 export default function Header({ title, sideToggle, setSideToggle }) {
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState(null);
+  const {data: session} = useSession();
+
+  console.log(session);
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -49,13 +53,14 @@ export default function Header({ title, sideToggle, setSideToggle }) {
       </div>
       <div className="mx-5 flex flex-row gap-2">
         <div className="text-gray-400 text-sm font-semibold my-auto hidden md:block ">
-          <p>ahmedessam@gmail.com</p>
+          <>{session?.user?.name}</>  
         </div>
         <div className="flex flex-row gap-0 items-center cursor-pointer" onClick={handleMenuOpen}>
           <Avatar alt="*User" src="" />
           <RiArrowDropDownLine size={25} />
         </div>
         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+          <MenuItem onClick={() => console.log('Profile clicked')}> {session?.user?.email} </MenuItem>
           <MenuItem onClick={() => console.log('Setting clicked')}>Setting</MenuItem>
           <MenuItem onClick={handleLogOut}>Log out</MenuItem>
         </Menu>

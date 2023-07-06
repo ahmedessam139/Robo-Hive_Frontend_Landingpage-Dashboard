@@ -52,16 +52,18 @@ const Package = () => {
     if (packageData) {
         return (
 
-            <div  style={containerStyle} ref={featuresRef}>
+            <div style={containerStyle} ref={featuresRef}>
                 <Counters counters={packageData.counters} />
                 <Package_Table packages={packageData.packages} getData={getData} />
                 <Footer />
             </div>
-    
+
         );
     } else {
         return (
-            <Loader />
+            <div className={`mt-10 h-96 w-full flex justify-center items-center`}>
+                <Loader />
+            </div>
         )
     }
 

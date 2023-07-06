@@ -8,35 +8,7 @@ import Loader from "@/components/Common/Loader";
 const Tenants = () => {
     const [tenantsData, setTenantsData] = useState(null);
 
-    // const tenantsData = [
-    //     {
-    //         "tenantId": "1",
-    //         "username": "rrr",
-    //         "email": "sdas@gmail.com",
-    //         "role": "Admin",
-    //         "creationTime": "2021-08-31T12:00:00Z",
-    //         "password": "12345678",
-    //         "updateTime": "2021-08-31T12:00:00Z",
-    //     },
-    //     {
-    //         "tenantId": "2",
-    //         "username": "dd",
-    //         "email": "dsa@gmail.com",
-    //         "password": "12345678",
-    //         "role": "Admin",
-    //         "creationTime": "2021-08-31T12:00:00Z",
-    //         "updateTime": "2021-08-31T12:00:00Z",
-    //     },
-    //     {
-    //         "tenantId": "3",
-    //         "username": "fff",
-    //         "email": "s@gmail,com",
-    //         "password": "12345678",
-    //         "role": "Admin",
-    //         "creationTime": "2021-08-31T12:00:00Z",
-    //         "updateTime": "2021-08-31T12:00:00Z",
-    //     },
-    // ];
+
 
     const getData = async () => {
         try {
@@ -85,15 +57,17 @@ const Tenants = () => {
 
     if (tenantsData) {
         return (
-            <div ref={featuresRef} style={containerStyle}>
-                <Counters counters={{tenants: tenantsData.length}} />
-                <Tenants_Table tenants={tenantsData} />
+            <div ref={featuresRef} style={containerStyle} >
+                <Counters counters={{ tenants: tenantsData.length }} />
+                <Tenants_Table tenants={tenantsData} getData={getData} />
                 <Footer />
             </div>
         )
     } else {
         return (
-            <Loader />
+            <div className={`mt-10 h-96 w-full flex justify-center items-center`}>
+                <Loader />
+            </div>
         )
     }
 
