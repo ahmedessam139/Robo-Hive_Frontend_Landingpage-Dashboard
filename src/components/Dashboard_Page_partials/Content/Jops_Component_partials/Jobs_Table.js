@@ -20,11 +20,21 @@ const Jobs_Table = ({ jobs, robots, packages }) => {
     console.log('Date:', selectedDate);
 
     const payload = {
-      "roboyId": selectedRobot,
-      "packageId": selectedPackage,
-      "time": selectedTime,
-      "date": selectedDate,
+      "Package": {
+        "package_name": packages.find((p) => p.packageId === selectedPackage).packageName,
+        "path":packages.find((p) => p.packageId === selectedPackage).downloadUrl
+      },
+      "Robot": {
+        "robot_name": "selectedRobot",
+        "robot_address": robots.find((r) => r.robotId === selectedRobot).robotAddress
+      },
+      "Schedule": {
+        "date": selectedDate,
+        "time": selectedTime+":00"
+      }
     };
+
+    console.log(payload);
 
 
     // Close the popup after job creation
