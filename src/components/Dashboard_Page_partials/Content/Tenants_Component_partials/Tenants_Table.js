@@ -1,3 +1,4 @@
+import axios from "../../../../utils/axios";
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button } from '@mui/material';
 import { confirmAlert } from 'react-confirm-alert';
@@ -60,9 +61,13 @@ const Tenants_Table = ({ tenants }) => {
             console.log('Delete tenant with ID:', tenantId);
             // Perform delete action here
             const payload = {
-              "tenantId": tenantId,
-              "status": "Deleted"
+              uuid: tenantId
             }
+            console.log(payload);
+            (async () => {
+              let res = await axios.delete('/api/authenticate/tenant', { data: payload });
+              console.log(res)
+            })()
           },
         },
         {
@@ -123,34 +128,48 @@ const Tenants_Table = ({ tenants }) => {
     handleClosePopup();
   };
 
-  const handleAddOne = () => {
+  const handleAddOne = async () => {
     console.log('Add one tenant');
-    const username = 'testUser';
-    const password = 'testPassword';
+    let username = 'testUser';
+    let password = 'testPassword';
 
-    const payload = {
-      "username": username,
-      "password": password,
+    try {
+      let res = await axios.post('/api/authenticate/tenant');
+      console.log(res)
+      username = res.data.profile.username;
+      password = res.data.profile.password;
+
+      //Put the username and password in confirm alert
+      confirmAlert({
+        title: 'Confirm Add',
+        message: `Tenant Added Successfully.-------------- Username: ${username} ----------------------- Password:${password}------------------`,
+        buttons: [
+          {
+            label: 'Ok',
+            onClick: () => {
+              console.log('Add tenant with username:', username);
+            },
+          },
+
+        ],
+      });
+
+    } catch (err) {
+      console.log(err)
+
+      //Put the username and password in confirm alert
+      confirmAlert({
+        title: 'An error occurred',
+        message: err.response.data.message,
+        buttons: [
+          {
+            label: 'Ok',
+          },
+        ],
+      });
     }
 
-    //Put the username and password in confirm alert
-    confirmAlert({
-      title: 'Confirm Add',
-      message: `Tenant Added Successfully.-------------- Username: ${username} ----------------------- Password:${password}------------------`,
-      buttons: [
-        {
-          label: 'Ok',
-          onClick: () => {
-            console.log('Add tenant with username:', username);
-            // Perform add action here
-            
-            
-            
-          },
-        },
 
-      ],
-    });
 
   };
 
@@ -193,9 +212,8 @@ const Tenants_Table = ({ tenants }) => {
           <table className="min-w-max w-full table-auto">
             <thead>
               <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                <th className="py-3 px-6 text-center">ID</th>
                 <th className="py-3 px-6 text-center">Username</th>
-                <th className="py-3 px-6 text-center">Email</th>
-                <th className="py-3 px-6 text-center">Password</th>
                 <th className="py-3 px-6 text-center">Role</th>
                 <th className="py-3 px-6 text-center">Creation Time</th>
                 <th className="py-3 px-6 text-center">Update Time</th>
@@ -206,9 +224,8 @@ const Tenants_Table = ({ tenants }) => {
             <tbody className="text-gray-600 text-sm font-light">
               {filterTenants.map((tenant) => (
                 <tr key={tenant.tenantId} className="border-b border-gray-200 hover:bg-gray-100">
+                  <td className="py-3 px-6 text-center">{tenant.tenantId}</td>
                   <td className="py-3 px-6 text-center">{tenant.username}</td>
-                  <td className="py-3 px-6 text-center">{tenant.email}</td>
-                  <td className="py-3 px-6 text-center">{tenant.password}</td>
                   <td className="py-3 px-6 text-center">{tenant.role}</td>
                   <td className="py-3 px-6 text-center">{tenant.creationTime}</td>
                   <td className="py-3 px-6 text-center">{tenant.updateTime}</td>
