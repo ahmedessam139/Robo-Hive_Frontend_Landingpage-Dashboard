@@ -12,7 +12,6 @@ export default function Header({ title, sideToggle, setSideToggle }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const {data: session} = useSession();
 
-  console.log(session);
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);

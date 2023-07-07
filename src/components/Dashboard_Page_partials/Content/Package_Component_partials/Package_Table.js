@@ -53,14 +53,19 @@ const Package_Table = ({ packages, getData }) => {
             buttons: [
                 {
                     label: 'Yes',
-                    onClick: () => {
+                    onClick: async () => {
                         console.log('Delete package with ID:', packageId);
                         const payload = {
                             packageId: packageId,
                             status: 'Deleted',
                         };
-                        axios.delete(`/api/packages/${packageId}`);
-                        getData();
+                        try {
+                            const oo = await axios.delete(`/api/packages/${packageId}`);
+                            getData();
+                            
+                        } catch (error) {
+                            console.log(error);
+                        }
                     },
                 },
                 {
@@ -108,15 +113,20 @@ const Package_Table = ({ packages, getData }) => {
         });
     };
 
-    const handleFormSubmit = () => {
+    const handleFormSubmit =async () => {
         // Perform update action using the updatedData state and packageIdToUpdate
         const payload = {
             name: updatedData.packageName,
             description: updatedData.description,
         };
-        (async () => {
-            let res = await axios.put(`/api/packages/${packageIdToUpdate}`, payload);
-        })()
+
+        try {
+            const  response = await axios.put(`/api/packages/${packageIdToUpdate}`, payload);
+            getData();
+        } catch (error) {
+            console.log(error);            
+        }
+      
         // Close the popup form
         handleClosePopup();
     };
