@@ -136,7 +136,7 @@ const Jobs_Table = ({ jobs, robots, packages }) => {
 
   return (
     <div>
-      <div className="bg-white p-4 m-4 rounded-lg ">
+      <div className="bg-white p-4 m-4 rounded-lg " style={{ height: '80vh' }}>
         <div className="flex flex-col md:flex-row md:justify-between mb-2 items-center ">
           <p className="mb-2 text-3xl text-gray-500">Jobs</p>
           <div className="flex  justify-end p-2">

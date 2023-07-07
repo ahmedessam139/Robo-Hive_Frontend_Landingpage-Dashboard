@@ -6,6 +6,7 @@ import { RiDownloadCloudLine } from 'react-icons/ri';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { FaSearchengin, FaCircle, FaCheckCircle, FaFileExcel, FaBan, FaTrashAlt, FaStopCircle, FaEdit, } from 'react-icons/fa';
 import { CSVLink } from 'react-csv';
+import Loader from "@/components/Common/Loader";
 
 const Package_Table = ({ packages, getData }) => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -133,7 +134,7 @@ const Package_Table = ({ packages, getData }) => {
 
     return (
         <div>
-            <div className="bg-white p-4 m-4 rounded-lg ">
+            <div className="bg-white p-4 m-4 rounded-lg min " style={{ height: '80vh' }}>
                 <div className="flex justify-between mb-2">
                     <p className="mb-2 text-3xl text-gray-500">Packages</p>
                     <div className="flex justify-end p-2">
@@ -175,7 +176,8 @@ const Package_Table = ({ packages, getData }) => {
                         </thead>
 
                         <tbody className="text-gray-600 text-sm font-light">
-                            {filterPackages.map((pkg) => (
+                            {filterPackages.length > 0 ? (
+                            filterPackages.map((pkg) => (
                                 <tr
                                     key={pkg.packageId}
                                     className="border-b border-gray-200 hover:bg-gray-100"
@@ -202,8 +204,20 @@ const Package_Table = ({ packages, getData }) => {
                                         />
                                     </td>
                                 </tr>
-                            ))}
+                            ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="5" className="py-3 px-6 text-center">
+                                        <div className="flex flex-col justify-center items-center ">
+                                            <Loader />
+                                            <h2 className=" font-bold mt-5">No Packages found.</h2>
+                                        </div>
+                                    </td>
+                                </tr>
+                            )}
                         </tbody>
+
+
                     </table>
                 </div>
             </div>

@@ -57,7 +57,7 @@ const Robots_Table = ({ robots }) => {
 
   return (
     <div>
-      <div className="bg-white p-4 m-4 rounded-lg ">
+      <div className="bg-white p-4 m-4 rounded-lg " style={{ height: '80vh' }}>
         <div className="flex justify-between mb-2">
           <p className="mb-2 text-3xl text-gray-500">Robots</p>
           <div className="flex justify-end p-2">
