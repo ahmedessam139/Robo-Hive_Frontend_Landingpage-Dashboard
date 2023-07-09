@@ -15,8 +15,6 @@ export default function Home() {
         try {
             
             let res = await axios.get('/api/home');
-
-            console.log(res.data)
             setHomeData(res.data);
 
         } catch (error) {

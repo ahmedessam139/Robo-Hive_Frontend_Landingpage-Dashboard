@@ -7,10 +7,11 @@ import { CSVLink } from 'react-csv';
 const Jobs_Table = ({ jobs, robots, packages }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showPopup, setShowPopup] = useState(false);
-  const [selectedRobot, setSelectedRobot] = useState('');
-  const [selectedPackage, setSelectedPackage] = useState('');
-  const [selectedTime, setSelectedTime] = useState('');
-  const [selectedDate, setSelectedDate] = useState('');
+  const [showError, setShowError] = useState(false);
+  const [selectedRobot, setSelectedRobot] = useState(null);
+  const [selectedPackage, setSelectedPackage] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
 
   const handleCreateJob = () => {
     // Perform job creation with the selected values here
@@ -18,15 +19,22 @@ const Jobs_Table = ({ jobs, robots, packages }) => {
     console.log('Package:', selectedPackage);
     console.log('Time:', selectedTime);
     console.log('Date:', selectedDate);
+    
+    if (!selectedRobot || !selectedPackage || !selectedDate || !selectedTime) {
+      setShowError(true);
+      return;
+    }
+
+    setShowError(false);
 
     const payload = {
       "Package": {
-        "package_name": packages.find((p) => p.packageId === selectedPackage).packageName,
-        "path":packages.find((p) => p.packageId === selectedPackage).downloadUrl
+        "package_name": packages.find((p) => p.id === selectedPackage).name,
+        "path":packages.find((p) => p.id === selectedPackage).downloadUrl
       },
       "Robot": {
         "robot_name": "selectedRobot",
-        "robot_address": robots.find((r) => r.robotId === selectedRobot).robotAddress
+        "robot_address": robots.find((r) => r.id === selectedRobot).robotAddress
       },
       "Schedule": {
         "date": selectedDate,
@@ -36,6 +44,13 @@ const Jobs_Table = ({ jobs, robots, packages }) => {
 
     console.log(payload);
 
+    (async () => {
+      try {
+        let res = await axios.post('/api/robots/package', payload);
+      } catch (err) {
+        console.log(err)
+      }
+    })();
 
     // Close the popup after job creation
     setShowPopup(false);
@@ -46,26 +61,25 @@ const Jobs_Table = ({ jobs, robots, packages }) => {
   };
 
   const handleClosePopup = () => {
-    setShowPopup(false);
     setSelectedRobot('');
     setSelectedPackage('');
     setSelectedTime('');
     setSelectedDate('');
-    
+    setShowPopup(false);
   };
 
   const headers = [
     { label: 'ID', key: 'id' },
     { label: 'Robot Name', key: 'robotName' },
-    { label: 'Package Name', key: 'packageName' },
+    { label: 'Package Name', key: 'name' },
     { label: 'Status', key: 'status' },
     { label: 'Action', key: 'action' },
   ];
 
-  const csvData = jobs.map(({ id, robotName, packageName, status }) => ({
+  const csvData = jobs.map(({ id, robotName, name, status }) => ({
     id,
     robotName,
-    packageName,
+    name,
     status,
     action: '',
   }));
@@ -73,7 +87,7 @@ const Jobs_Table = ({ jobs, robots, packages }) => {
   const filterJobs = jobs.filter((job) => {
     return (
       job.robotName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.packageName.toLowerCase().includes(searchTerm.toLowerCase())
+      job.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
 
@@ -96,6 +110,13 @@ const Jobs_Table = ({ jobs, robots, packages }) => {
             };
 
             // Perform delete action here
+            (async () => {
+              try {
+                let res = await axios.delete(`/api/jobs/delete/${jobId}`, payload);
+              } catch (err) {
+                console.log(err)
+              }
+            })();
           },
         },
         {
@@ -122,6 +143,13 @@ const Jobs_Table = ({ jobs, robots, packages }) => {
               status: 'Stopped',
             };
             // Perform stop action here
+            (async () => {
+              try {
+                let res = await axios.get(`/api/jobs/cancel/${jobId}`, payload);
+              } catch (err) {
+                console.log(err)
+              }
+            })();
           },
         },
         {
@@ -182,7 +210,7 @@ const Jobs_Table = ({ jobs, robots, packages }) => {
                 <tr key={job.id} className="border-b border-gray-200 hover:bg-gray-100">
                   <td className="py-3 px-6 text-center">{job.id}</td>
                   <td className="py-3 px-6 text-center">{job.robotName}</td>
-                  <td className="py-3 px-6 text-center">{job.packageName}</td>
+                  <td className="py-3 px-6 text-center">{job.name}</td>
                   <td className="py-3 px-6 text-center">
                     {job.status === 'pending' && (
                       <div className="flex items-center justify-center">
@@ -224,22 +252,22 @@ const Jobs_Table = ({ jobs, robots, packages }) => {
       <Dialog open={showPopup} onClose={handleClosePopup} maxWidth="sm" fullWidth pading="2rem">
         <DialogTitle>Create Job</DialogTitle>
         <DialogContent>
-          <FormControl fullWidth sx={{ mb: 2 }}>
+          <FormControl required fullWidth sx={{ mb: 2 }}>
             <InputLabel>Robot</InputLabel>
-            <Select value={selectedRobot} onChange={(e) => setSelectedRobot(e.target.value)} margin='dense'>
+            <Select required value={selectedRobot} onChange={(e) => setSelectedRobot(e.target.value)} margin='dense'>
               {robots.map((robot) => (
-                <MenuItem key={robot.robotId} value={robot.robotId}>
+                <MenuItem key={robot.id} value={robot.id}>
                   {robot.robotAddress}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
-          <FormControl fullWidth sx={{ mb: 2 }}>
+          <FormControl required fullWidth sx={{ mb: 2 }}>
             <InputLabel>Package</InputLabel>
-            <Select value={selectedPackage} onChange={(e) => setSelectedPackage(e.target.value)} margin='dense'>
+            <Select required value={selectedPackage} onChange={(e) => setSelectedPackage(e.target.value)} margin='dense'>
               {packages.map((package_) => (
-                <MenuItem key={package_.packageId} value={package_.packageId}>
-                  {package_.packageName}
+                <MenuItem key={package_.id} value={package_.id}>
+                  {package_.name}
                 </MenuItem>
               ))}
             </Select>
@@ -262,6 +290,7 @@ const Jobs_Table = ({ jobs, robots, packages }) => {
             fullWidth
             sx={{ mb: 2 }}
           />
+          {showError && <p className='text-red-600'>* All fields must be filled out.</p>}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClosePopup}>Cancel</Button>
