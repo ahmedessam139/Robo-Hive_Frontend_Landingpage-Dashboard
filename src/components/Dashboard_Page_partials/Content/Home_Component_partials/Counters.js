@@ -25,7 +25,7 @@ const Counters = ({ counters }) => {
               <h4 className="text-lg font-medium mb-2">
                 Machines<i className="mdi mdi-cogs mdi-24px float-right"></i>
               </h4>
-              <h2 className="text-4xl font-bold">{counters.machines}</h2>
+              <h2 className="text-4xl font-bold">{counters.robots}</h2>
               <h6 className="text-xs font-medium">Active machines</h6>
             </div>
           </div>

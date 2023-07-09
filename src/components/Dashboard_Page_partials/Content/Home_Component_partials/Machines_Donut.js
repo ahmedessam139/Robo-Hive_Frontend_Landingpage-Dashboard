@@ -9,7 +9,7 @@ const Machines_Donut = ({ machines }) => {
         labels: ['Connected', 'Disconnected'],
         datasets: [
             {
-                data: [75, 25],
+                data: [machines.connected, machines.connected == 0 && machines.disconnectedRobots == 0 ? 1 : machines.disconnectedRobots],
                 backgroundColor: ['#4CAF50', '#FF5722'],
             },
         ],

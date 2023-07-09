@@ -4,11 +4,10 @@ import 'react-circular-progressbar/dist/styles.css';
 
 
 const Jobs_Charts = ({ jobs }) => {
-    const { total, pending, Executed, failed } = jobs;
-    const pendingPercentage = Math.round((pending / total) * 100);
-    const executedPercentage = Math.round((Executed / total) * 100);
-    const failedPercentage = Math.round((failed / total) * 100);
-
+    const { total, pending, executed, failed } = jobs;
+    const pendingPercentage = Math.round(total == 0 ? 0 : (pending / total) * 100);
+    const executedPercentage = Math.round(total == 0 ? 0 : (executed / total) * 100);
+    const failedPercentage = Math.round(total == 0 ? 0 : (failed / total) * 100);
 
     return (
         <div className="bg-white p-4 m-2 md:m-4 rounded-lg shadow-md ">

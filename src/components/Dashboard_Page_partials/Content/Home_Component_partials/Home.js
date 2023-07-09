@@ -14,6 +14,10 @@ export default function Home() {
     const getHomeData = async () => {
         try {
             
+            let res = await axios.get('/api/home');
+
+            console.log(res.data)
+            setHomeData(res.data);
 
         } catch (error) {
             console.log(error);
@@ -45,7 +49,7 @@ export default function Home() {
                 observer.unobserve(featuresRef.current);
             }
         };
-    }, []);
+    }, [homeData]);
 
 
 
@@ -65,7 +69,7 @@ if (!homeData) {
                 <Jobs_Charts jobs={homeData.jobs} />
                 </div>
                 <div className="col-span-1 md:col-span-1">
-                <Machines_Donut machines={homeData.machines} />
+                <Machines_Donut machines={homeData.robots} />
                 </div>
             </div>
             <Footer />
