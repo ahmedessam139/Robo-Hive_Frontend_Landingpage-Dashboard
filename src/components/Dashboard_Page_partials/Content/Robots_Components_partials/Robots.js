@@ -2,41 +2,59 @@ import Counters from "./Counters";
 import Robots_Table from "./Robots_Table";
 import Footer from "@/components/Common/Footer";
 import { useState, useEffect, useRef } from "react";
+import axios from "../../../../utils/axios";
 
 const Robots = () => {
-    const robotData = {
-        "counters": {
-            "robots": 10,
-            "connectedRobots": 5,
-            "disconnectedRobots": 5
-        },
-        "robots": [
-            {
-                "robotId": 1,
-                "robotAddress": '12.235.2.2',
-                "joinedAt": "2021-07-01T00:00:00.000Z",
-                "status": "connected"
+    // const robotData = {
+    //     "counters": {
+    //         "robots": 10,
+    //         "connectedRobots": 5,
+    //         "disconnectedRobots": 5
+    //     },
+    //     "robots": [
+    //         {
+    //             "robotId": 1,
+    //             "robotAddress": '12.235.2.2',
+    //             "joinedAt": "2021-07-01T00:00:00.000Z",
+    //             "status": "connected"
 
-            },
-            {
-                "robotId": 2,
-                "robotAddress": '243.34.34.4',
-                "joinedAt": "2021-07-01T00:00:00.000Z",
-                "status": "disconnected"
+    //         },
+    //         {
+    //             "robotId": 2,
+    //             "robotAddress": '243.34.34.4',
+    //             "joinedAt": "2021-07-01T00:00:00.000Z",
+    //             "status": "disconnected"
 
-            },
-            {
-                "robotId": 3,
-                "robotAddress": '324234.34.34.4',
-                "joinedAt": "2021-07-01T00:00:00.000Z",
-                "status": "connected"
+    //         },
+    //         {
+    //             "robotId": 3,
+    //             "robotAddress": '324234.34.34.4',
+    //             "joinedAt": "2021-07-01T00:00:00.000Z",
+    //             "status": "connected"
 
-            },
-        ]
-    };
+    //         },
+    //     ]
+    // };
 
+    const [robotData, setRobotData] = useState(null);
     const [showFeatures, setShowFeatures] = useState(false);
     const featuresRef = useRef(null);
+
+    const getRobotData = async () => {
+        try {
+            
+            let res = await axios.get('/api/robots/get');
+            console.log(res.data);
+            setRobotData(res.data);
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        getRobotData();
+    }, []);
 
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
@@ -56,7 +74,7 @@ const Robots = () => {
                 observer.unobserve(featuresRef.current);
             }
         };
-    }, []);
+    }, [robotData]);
 
 
 
@@ -67,16 +85,20 @@ const Robots = () => {
     };
 
 
-    return (
+    if (!robotData) {
+        return <div>Loading...</div>;
+    } else {
+        return (
 
-        <div ref={featuresRef} style={containerStyle}>
-            <Counters counters={robotData.counters} />
-            <Robots_Table robots={robotData.robots} />
-            <Footer />
-        </div>
-
-
-    );
+            <div ref={featuresRef} style={containerStyle}>
+                <Counters counters={robotData.counters} />
+                <Robots_Table robots={robotData.robots} />
+                <Footer />
+            </div>
+    
+    
+        );
+    }
 };
 
 export default Robots;

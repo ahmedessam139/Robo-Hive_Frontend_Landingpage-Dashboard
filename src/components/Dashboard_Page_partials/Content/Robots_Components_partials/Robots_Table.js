@@ -4,21 +4,22 @@ import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { FaSearchengin, FaCircle, FaCheckCircle, FaBan, FaTrashAlt, FaFileExcel  } from 'react-icons/fa';
 import { CSVLink } from 'react-csv';
+import axios from "../../../../utils/axios";
 
 const Robots_Table = ({ robots }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const headers = [
-    { label: 'Robot ID', key: 'robotId' },
+    { label: 'Robot ID', key: 'id' },
     { label: 'Robot Address', key: 'robotAddress' },
-    { label: 'Joined At', key: 'joinedAt' },
+    { label: 'Joined At', key: 'createdAt' },
     { label: 'Status', key: 'status' },
   ];
 
-  const csvData = robots.map(({ robotId, robotAddress, joinedAt, status }) => ({
-    robotId,
+  const csvData = robots.map(({ id, robotAddress, createdAt, status }) => ({
+    id,
     robotAddress,
-    joinedAt,
+    createdAt,
     status,
   }));
 
@@ -28,21 +29,28 @@ const Robots_Table = ({ robots }) => {
     setSearchTerm(event.target.value);
   };
 
-  const handleDelete = robotId => {
+  const handleDelete = id => {
     confirmAlert({
       title: 'Confirm Delete',
-      message: `Are you sure you want to delete this robot with ID (${robotId})?`,
+      message: `Are you sure you want to delete this robot with ID (${id})?`,
       buttons: [
         {
           label: 'Yes',
           onClick: () => {
-            console.log('Delete robot with ID:', robotId);
+            console.log('Delete robot with ID:', id);
             const payload = {
-              robotId: robotId,
+              id: id,
               status: 'Deleted',
             };
             
             // Perform delete action here
+            (async () => {
+              try {
+                axios.delete(`/api/robots/delete/${id}`, {data: payload});
+              } catch (err) {
+                console.log(err);
+              }
+            })();
           },
         },
         {
@@ -100,10 +108,10 @@ const Robots_Table = ({ robots }) => {
 
             <tbody className="text-gray-600 text-sm font-light">
               {robots.map(robot => (
-                <tr key={robot.robotId} className="border-b border-gray-200 hover:bg-gray-100">
-                  <td className="py-3 px-6 text-center">{robot.robotId}</td>
+                <tr key={robot.id} className="border-b border-gray-200 hover:bg-gray-100">
+                  <td className="py-3 px-6 text-center">{robot.id}</td>
                   <td className="py-3 px-6 text-center">{robot.robotAddress}</td>
-                  <td className="py-3 px-6 text-center">{robot.joinedAt}</td>
+                  <td className="py-3 px-6 text-center">{robot.createdAt}</td>
                   <td className="py-3 px-6 text-center">
                     {robot.status === 'connected' && (
                       <div className="flex items-center justify-center">
@@ -122,7 +130,7 @@ const Robots_Table = ({ robots }) => {
                     <FaTrashAlt
                       size={16}
                       className="text-red-500 mr-2 cursor-pointer"
-                      onClick={() => handleDelete(robot.robotId)}
+                      onClick={() => handleDelete(robot.id)}
                     />
                   </td>
                 </tr>

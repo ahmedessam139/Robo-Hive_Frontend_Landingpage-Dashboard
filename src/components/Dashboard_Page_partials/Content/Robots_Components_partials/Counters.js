@@ -18,7 +18,7 @@ const Counters = ({ counters }) => {
             <h4 className="text-lg font-medium mb-2">
               Connected Robots<i className="mdi mdi-wifi mdi-24px float-right"></i>
             </h4>
-            <h2 className="text-4xl font-bold">{counters.connectedRobots}</h2>
+            <h2 className="text-4xl font-bold">{counters.connected}</h2>
             <h6 className="text-xs font-medium">Connected Robots</h6>
           </div>
         </div>
