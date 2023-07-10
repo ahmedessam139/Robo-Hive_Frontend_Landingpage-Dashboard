@@ -13,14 +13,14 @@ const Robots_Table = ({ robots }) => {
     { label: 'Robot ID', key: 'id' },
     { label: 'Robot Address', key: 'robotAddress' },
     { label: 'Joined At', key: 'createdAt' },
-    { label: 'Status', key: 'status' },
+    { label: 'Status', key: 'connected' },
   ];
 
-  const csvData = robots.map(({ id, robotAddress, createdAt, status }) => ({
+  const csvData = robots.map(({ id, robotAddress, createdAt, connected }) => ({
     id,
     robotAddress,
     createdAt,
-    status,
+    connected,
   }));
 
   
@@ -113,13 +113,13 @@ const Robots_Table = ({ robots }) => {
                   <td className="py-3 px-6 text-center">{robot.robotAddress}</td>
                   <td className="py-3 px-6 text-center">{robot.createdAt}</td>
                   <td className="py-3 px-6 text-center">
-                    {robot.status === 'connected' && (
+                    {robot.connected && (
                       <div className="flex items-center justify-center">
                         <FaCircle size={16} className="text-green-500 mr-2" />
                         <span className="text-green-500 font-bold text-center">Connected</span>
                       </div>
                     )}
-                    {robot.status === 'disconnected' && (
+                    {!robot.connected && (
                       <div className="flex items-center justify-center">
                         <FaBan size={16} className="text-red-500 mr-1" />
                         <span className="text-red-500 font-semibold text-center">Disconnected</span>
