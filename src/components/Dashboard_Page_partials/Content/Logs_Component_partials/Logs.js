@@ -7,14 +7,25 @@ import axios from "../../../../utils/axios";
 const Logs = () => {
     // const robotData = [
     //     {
-    //         robotAddress: '12.235.2.2',
+    //         "id": 12,
+    //         "createdAt": "2023-07-10T23:15:15.564Z",
+    //         "updatedAt": "2023-07-11T01:19:20.570Z",
+    //         "robotName": "DESKTOP-SVU2A36",
+    //         "robotAddress": "0A0027000011",
+    //         "socketID": null,
+    //         "connected": false,
+    //         "userID": 1
     //     },
     //     {
-    //         robotAddress: '243.34.34.4',
-    //     },
-    //     {
-    //         robotAddress: '324234.34.34.4',
-    //     },
+    //         "id": 14,
+    //         "createdAt": "2023-07-11T00:28:35.056Z",
+    //         "updatedAt": "2023-07-11T02:10:05.941Z",
+    //         "robotName": "LAPTOP-TAUNF8FD",
+    //         "robotAddress": "001AFFDB45C2",
+    //         "socketID": null,
+    //         "connected": false,
+    //         "userID": 1
+    //     }
     // ];
 
     // const robotLogs = [
@@ -24,7 +35,7 @@ const Logs = () => {
     //         "status": "Running",
     //         "timestamp": "12345",
     //         "message": "this is a log entry 2",
-    //         "robotAddress": '12.235.2.2'
+    //         "robotAddress": '001AFFDB45C2'
     //     },
     //     {
     //         "logType": "INFO",
@@ -32,7 +43,7 @@ const Logs = () => {
     //         "status": "Running",
     //         "timestamp": "12345",
     //         "message": "this is a log entry 2",
-    //         "robotAddress": '12.235.2.2'
+    //         "robotAddress": '001AFFDB45C2'
     //     },
     //     {
     //         "logType": "INFO",
@@ -40,8 +51,14 @@ const Logs = () => {
     //         "status": "Running",
     //         "timestamp": "12345",
     //         "message": "this is a log entry 2",
-    //         "robotAddress": '12.235.2.2'
-    //     },
+    //         "robotAddress": '001AFFDB45C2'
+    //     },{
+    //         "logType": "INFO",
+    //         "name": "Labels",
+    //         "status": "Running",
+    //         "timestamp": "12345",
+    //         "message": "this is a log entry 2",
+    //     }
     // ];
 
     const [robotLogs, setRobotLogs] = useState(null);
@@ -97,7 +114,9 @@ const Logs = () => {
     useEffect( () => {
         console.log(selectedRobot);
         if (selectedRobot) {
-           setLogsOfSelectedRobot(robotLogs.filter(robot => robot.robotAddress == selectedRobot));
+            console.log(robotData)
+            console.log(robotLogs)
+           setLogsOfSelectedRobot(robotLogs.filter(log => log.robotAddress == selectedRobot));
         }
         console.log(logsOfSelectedRobot);
       }, [selectedRobot]);
