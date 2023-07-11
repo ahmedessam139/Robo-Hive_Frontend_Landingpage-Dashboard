@@ -4,10 +4,10 @@ import 'react-circular-progressbar/dist/styles.css';
 
 
 const Jobs_Charts = ({ jobs }) => {
-    const { total, pending, executed, failed } = jobs;
+    const { total, pending, executed, cancelled } = jobs;
     const pendingPercentage = Math.round(total == 0 ? 0 : (pending / total) * 100);
     const executedPercentage = Math.round(total == 0 ? 0 : (executed / total) * 100);
-    const failedPercentage = Math.round(total == 0 ? 0 : (failed / total) * 100);
+    const cancelledPercentage = Math.round(total == 0 ? 0 : (cancelled / total) * 100);
 
     return (
         <div className="bg-white p-4 m-2 md:m-4 rounded-lg shadow-md ">
@@ -64,8 +64,8 @@ const Jobs_Charts = ({ jobs }) => {
                 </div>
                 <div style={{ width: 300, height: 300 }} className='flex flex-col items-center justify-center gap-5'>
                     <CircularProgressbar
-                        value={failedPercentage}
-                        text={`${failedPercentage}%`}
+                        value={cancelledPercentage}
+                        text={`${cancelledPercentage}%`}
                         strokeWidth={10}
                         styles={{
                             path: {
@@ -80,7 +80,7 @@ const Jobs_Charts = ({ jobs }) => {
                         }}
                     />
                     <h2 style={{ padding: "8px", color: "#4B5563", fontWeight: "bold", textTransform: "uppercase", }} >
-                        Failed
+                        Cancelled
                     </h2>
                 </div>
             </div>

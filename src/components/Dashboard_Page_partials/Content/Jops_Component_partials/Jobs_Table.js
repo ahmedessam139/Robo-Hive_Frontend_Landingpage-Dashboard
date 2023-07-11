@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { confirmAlert } from 'react-confirm-alert';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-import { FaSearchengin, FaCircle, FaCheckCircle, FaFileExcel, FaBan, FaTrashAlt, FaStopCircle, FaPlus } from 'react-icons/fa';
+import { FaSearchengin, FaCircle, FaCheckCircle, FaFileExcel, FaBan, FaTrashAlt, FaPlus, FaPlay, FaSignal, FaBroadcastTower, FaStop } from 'react-icons/fa';
 import { CSVLink } from 'react-csv';
 import axios from "../../../../utils/axios";
 
@@ -28,10 +28,13 @@ const Jobs_Table = ({ jobs, robots, packages }) => {
 
     setShowError(false);
 
+    console.log(packages.find((p) => p.id == selectedPackage))
+    console.log(selectedPackage)
+
     const payload = {
       "Package": {
         "package_name": packages.find((p) => p.id === selectedPackage).name,
-        "path":packages.find((p) => p.id === selectedPackage).downloadUrl
+        "path": packages.find((p) => p.id === selectedPackage).packageUrl
       },
       "Robot": {
         "robot_name": "selectedRobot",
@@ -87,8 +90,7 @@ const Jobs_Table = ({ jobs, robots, packages }) => {
 
   const filterJobs = jobs.filter((job) => {
     return (
-      job.robotName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.name.toLowerCase().includes(searchTerm.toLowerCase())
+      job.robot.robotName.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
 
@@ -163,6 +165,35 @@ const Jobs_Table = ({ jobs, robots, packages }) => {
     });
   };
 
+  const handleForce = (jobId) => {
+    confirmAlert({
+      title: 'Confirm Force',
+      message: `Sure you want to force this job with ID (${jobId})?`,
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => {
+            console.log('Force job with ID:', jobId);
+            // Perform stop action here
+            (async () => {
+              try {
+                let res = await axios.get(`/api/jobs/force/${jobId}`);
+              } catch (err) {
+                console.log(err)
+              }
+            })();
+          },
+        },
+        {
+          label: 'No',
+          onClick: () => {
+            // Do nothing or handle cancel action
+          },
+        },
+      ],
+    });
+  };
+
   return (
     <div>
       <div className="bg-white p-4 m-4 rounded-lg " style={{ height: '80vh' }}>
@@ -201,6 +232,8 @@ const Jobs_Table = ({ jobs, robots, packages }) => {
                 <th className="py-3 px-6 text-center">ID</th>
                 <th className="py-3 px-6 text-center">Robot Name</th>
                 <th className="py-3 px-6 text-center">Package Name</th>
+                <th className="py-3 px-6 text-center">Scheduled Date</th>
+                <th className="py-3 px-6 text-center">Scheduled Time</th>
                 <th className="py-3 px-6 text-center">Status</th>
                 <th className="py-3 px-6 text-center">Action</th>
               </tr>
@@ -210,38 +243,53 @@ const Jobs_Table = ({ jobs, robots, packages }) => {
               {filterJobs.map((job) => (
                 <tr key={job.id} className="border-b border-gray-200 hover:bg-gray-100">
                   <td className="py-3 px-6 text-center">{job.id}</td>
-                  <td className="py-3 px-6 text-center">{job.robotName}</td>
-                  <td className="py-3 px-6 text-center">{job.name}</td>
+                  <td className="py-3 px-6 text-center">{job.robot.robotName}</td>
+                  <td className="py-3 px-6 text-center">{job.package.name}</td>
+                  <td className="py-3 px-6 text-center">{job.date}</td>
+                  <td className="py-3 px-6 text-center">{job.time}</td>
                   <td className="py-3 px-6 text-center">
-                    {job.status === 'pending' && (
+                    {job.status.toLowerCase() === 'pending' && (
                       <div className="flex items-center justify-center">
                         <FaCircle size={16} className="text-yellow-500 mr-2" />
                         <span className="text-yellow-500 font-bold text-center">Pending</span>
                       </div>
                     )}
-                    {job.status === 'executed' && (
+                    {job.status.toLowerCase() === 'executed' && (
                       <div className="flex items-center justify-center">
                         <FaCheckCircle size={16} className="text-green-500 mr-2" />
                         <span className="text-green-500 font-bold text-center">Executed</span>
                       </div>
                     )}
-                    {job.status === 'failed' && (
+                    {job.status.toLowerCase() === 'cancelled' && (
                       <div className="flex items-center justify-center">
-                        <FaBan size={16} className="text-red-500 mr-1" />
+                        <FaBan size={16} className="text-orange-500 mr-1" />
+                        <span className="text-orange-500 font-semibold text-center">Cancelled</span>
+                      </div>
+                    )}
+                    {job.status.toLowerCase() === 'failed' && (
+                      <div className="flex items-center justify-center">
+                        <FaBroadcastTower size={20} className="text-red-500 mr-3" />
                         <span className="text-red-500 font-semibold text-center">Failed</span>
                       </div>
                     )}
                   </td>
                   <td className="py-3 px-6 flex justify-center items-center gap-3">
+                    {job.status.toLowerCase() === 'pending' && (
+                      <FaPlay
+                      size={16}
+                      className="text-green-700 mr-2 cursor-pointer"
+                      onClick={() => handleForce(job.id)}
+                    />
+                    )}
+                    {job.status.toLowerCase() === 'pending' && (<FaStop
+                      size={16}
+                      className="text-yellow-500 mr-2 cursor-pointer"
+                      onClick={() => handleStop(job.id)}
+                    />)}
                     <FaTrashAlt
                       size={16}
-                      className="text-red-500 mr-2 cursor-pointer"
+                      className="text-red-500 cursor-pointer"
                       onClick={() => handleDelete(job.id)}
-                    />
-                    <FaStopCircle
-                      size={16}
-                      className="text-yellow-500 cursor-pointer"
-                      onClick={() => handleStop(job.id)}
                     />
                   </td>
                 </tr>
