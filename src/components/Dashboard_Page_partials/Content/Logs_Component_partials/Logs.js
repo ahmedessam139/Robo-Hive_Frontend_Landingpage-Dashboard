@@ -4,6 +4,7 @@ import Logs_Table from "./Logs_Table";
 import Footer from "../../../../components/Common/Footer";
 import axios from "../../../../utils/axios";
 import { useSession } from 'next-auth/react';
+import Loader from "@/components/Common/Loader";
 
 const Logs = () => {
     const { data: session } = useSession();
@@ -92,7 +93,11 @@ const Logs = () => {
 
 
     if (!robotData) {
-        return <div>Loading...</div>;
+        return (
+            <div className={`mt-10 h-96 w-full flex justify-center items-center`}>
+                <Loader />
+            </div>
+        );
     } else {
         return (
             <div ref={featuresRef} style={containerStyle}>

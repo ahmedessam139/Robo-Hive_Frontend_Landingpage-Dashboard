@@ -1,9 +1,10 @@
 import React from 'react';
-import { useState , useEffect , useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Counters from './Counters';
 import Jobs_Table from './Jobs_Table';
 import Footer from "@/components/Common/Footer";
 import axios from "../../../../utils/axios";
+import Loader from "@/components/Common/Loader";
 
 
 const Jobs = () => {
@@ -20,7 +21,7 @@ const Jobs = () => {
     //         "description": "Description 1",
     //         "createdDate": "2021-07-01",
     //         "downloadUrl": "https://www.google.com",
-            
+
     //     },
     //     {
     //         "packageId": 4,
@@ -76,12 +77,12 @@ const Jobs = () => {
 
     const getJobsData = async () => {
         try {
-            
+
             let res = await axios.get('/api/jobs/get');
             setJobsData(res.data);
 
         } catch (error) {
-            
+
             console.log(error);
         }
     };
@@ -120,7 +121,11 @@ const Jobs = () => {
 
 
     if (!jobsData) {
-        return <div>Loading...</div>;
+        return (
+            <div className={`mt-10 h-96 w-full flex justify-center items-center`}>
+                <Loader />
+            </div>
+        );
     } else {
         return (
             <div ref={featuresRef} style={containerStyle}>
