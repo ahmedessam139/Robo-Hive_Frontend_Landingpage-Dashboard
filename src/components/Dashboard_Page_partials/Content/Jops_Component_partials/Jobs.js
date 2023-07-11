@@ -125,7 +125,7 @@ const Jobs = () => {
         return (
             <div ref={featuresRef} style={containerStyle}>
                 <Counters counters={jobsData.counters} />
-                <Jobs_Table jobs={jobsData.jobs} robots={jobsData.robots} packages={jobsData.packages} />
+                <Jobs_Table jobs={jobsData.jobs} robots={jobsData.robots} packages={jobsData.packages} getJops={getJobsData} />
                 <Footer />
             </div>
         );
