@@ -97,7 +97,7 @@ const Logs = () => {
     useEffect( () => {
         console.log(selectedRobot);
         if (selectedRobot) {
-           setLogsOfSelectedRobot(robotLogs);
+           setLogsOfSelectedRobot(robotLogs.filter(robot => robot.robotAddress == selectedRobot));
         }
         console.log(logsOfSelectedRobot);
       }, [selectedRobot]);

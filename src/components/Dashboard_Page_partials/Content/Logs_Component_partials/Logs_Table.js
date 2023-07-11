@@ -67,7 +67,7 @@ const Logs_Table = ({ logs, setSelectedRobot, robots, selectedRobot }) => {
                                 label="Select Robot"
                                 variant="outlined"
                                 value={selectedRobot}
-                                onChange={(event) => setSelectedRobot(event.target.value)}
+                                onChange={(event) => {console.log(event.target.value);setSelectedRobot(event.target.value)}}
                                 className="w-56"
                             >
                                 {robots.map((robot) => (
