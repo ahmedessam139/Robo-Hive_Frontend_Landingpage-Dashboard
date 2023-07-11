@@ -1,4 +1,4 @@
-import { useState,useEffect ,useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import Counters from "./Counter";
 import Logs_Table from "./Logs_Table";
 import Footer from "../../../../components/Common/Footer";
@@ -6,11 +6,63 @@ import axios from "../../../../utils/axios";
 import { useSession } from 'next-auth/react';
 
 const Logs = () => {
-    const {data: session} = useSession();
+    const { data: session } = useSession();
     const [robotLogs, setRobotLogs] = useState([]);
     const [robotData, setRobotData] = useState(null);
     const [showFeatures, setShowFeatures] = useState(false);
     const featuresRef = useRef(null);
+    const [selectedRobot, setSelectedRobot] = useState(null);
+    const [logsOfSelectedRobot, setLogsOfSelectedRobot] = useState([]);
+
+
+    const getRobotData = async () => {
+        try {
+            let robots = await axios.get('/api/robots/get');
+            setRobotData(robots.data.robots);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const getLogData = async (robotAddress, userId) => {
+        try {
+            const response = await axios.post('/api/elastic', {
+                robotAddress: robotAddress,
+                userId: userId
+            }, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
+            setRobotLogs(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        getRobotData();
+    }, []);
+
+    useEffect(() => {
+        console.log(selectedRobot);
+        if (selectedRobot) {
+            getLogData(selectedRobot, session.userInfo.id);
+            setLogsOfSelectedRobot(robotLogs);
+        }
+        console.log(logsOfSelectedRobot);
+    }, [selectedRobot]);
+
+    useEffect(() => {
+        if (robotLogs) {
+            setLogsOfSelectedRobot(robotLogs);
+        }
+        else {
+            setLogsOfSelectedRobot([]);
+        }
+    }, [robotLogs]);
+
 
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
@@ -32,52 +84,10 @@ const Logs = () => {
         };
     }, [robotData, robotLogs]);
 
-
-    const getRobotData = async () => {
-        try {
-            let robots = await axios.get('/api/robots/get');
-            setRobotData(robots.data.robots);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    const getLogData = async (robotAddress, userId) => {
-        try {
-            let res = await fetch('/api/elastic', {
-                headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json'
-                },
-                method: "POST",
-                body: JSON.stringify({robotAddress: robotAddress, userId: userId})
-            });
-            setRobotLogs(await res.json())
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    useEffect(() => {
-        getRobotData();
-    }, []);
-
     const containerStyle = {
         opacity: showFeatures ? '1' : '0',
         transition: 'margin-top 700ms  ease-out, opacity 700ms ease-out',
     };
-
-    const [selectedRobot, setSelectedRobot] = useState(null);
-    const [logsOfSelectedRobot, setLogsOfSelectedRobot] = useState([]);
-
-    useEffect( () => {
-        console.log(selectedRobot);
-        if (selectedRobot) {
-            getLogData(selectedRobot, session.userInfo.id);
-            setLogsOfSelectedRobot(robotLogs);
-        }
-        console.log(logsOfSelectedRobot);
-      }, [selectedRobot]);
 
 
 
@@ -86,9 +96,9 @@ const Logs = () => {
     } else {
         return (
             <div ref={featuresRef} style={containerStyle}>
-            <Counters counters={{robots:robotData.length}}/>
-            <Logs_Table logs={logsOfSelectedRobot} robots={robotData} selectedRobot={selectedRobot} setSelectedRobot={setSelectedRobot}/>
-            <Footer/>
+                <Counters counters={{ robots: robotData.length }} />
+                <Logs_Table logs={logsOfSelectedRobot} robots={robotData} selectedRobot={selectedRobot} setSelectedRobot={setSelectedRobot} />
+                <Footer />
             </div>
         )
     }
