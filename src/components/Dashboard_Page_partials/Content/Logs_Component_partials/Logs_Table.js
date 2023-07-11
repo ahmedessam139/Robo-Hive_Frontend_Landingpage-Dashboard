@@ -71,7 +71,7 @@ const Logs_Table = ({ logs, setSelectedRobot, robots, selectedRobot }) => {
                                 className="w-56"
                             >
                                 {robots.map((robot) => (
-                                    <MenuItem key={robot.robotId} value={robot.robotId}>
+                                    <MenuItem key={robot.id} value={robot.robotAddress}>
                                         {robot.robotAddress}
                                     </MenuItem>
                                 ))}
