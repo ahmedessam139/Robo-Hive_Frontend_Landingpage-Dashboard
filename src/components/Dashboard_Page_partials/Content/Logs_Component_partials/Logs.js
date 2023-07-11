@@ -62,7 +62,7 @@ const Logs = () => {
     //     }
     // ];
     const {data: session} = useSession();
-    const [robotLogs, setRobotLogs] = useState(null);
+    const [robotLogs, setRobotLogs] = useState([]);
     const [robotData, setRobotData] = useState(null);
     const [showFeatures, setShowFeatures] = useState(false);
     const featuresRef = useRef(null);
@@ -130,7 +130,7 @@ const Logs = () => {
 
 
 
-    if (!robotData || !robotLogs) {
+    if (!robotData) {
         return <div>Loading...</div>;
     } else {
         return (
