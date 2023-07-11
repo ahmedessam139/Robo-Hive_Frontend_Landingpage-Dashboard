@@ -92,7 +92,7 @@ const Robots = () => {
 
             <div ref={featuresRef} style={containerStyle}>
                 <Counters counters={robotData.counters} />
-                <Robots_Table robots={robotData.robots} />
+                <Robots_Table robots={robotData.robots} getRobots={getRobotData} />
                 <Footer />
             </div>
     

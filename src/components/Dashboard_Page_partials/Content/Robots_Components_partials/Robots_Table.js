@@ -6,7 +6,7 @@ import { FaSearchengin, FaCircle, FaCheckCircle, FaBan, FaTrashAlt, FaFileExcel 
 import { CSVLink } from 'react-csv';
 import axios from "../../../../utils/axios";
 
-const Robots_Table = ({ robots }) => {
+const Robots_Table = ({ robots , getRobots}) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const headers = [
@@ -47,6 +47,7 @@ const Robots_Table = ({ robots }) => {
             (async () => {
               try {
                 axios.delete(`/api/robots/delete/${id}`, {data: payload});
+                getRobots();
               } catch (err) {
                 console.log(err);
               }
@@ -65,7 +66,7 @@ const Robots_Table = ({ robots }) => {
 
   return (
     <div>
-      <div className="bg-white p-4 m-4 rounded-lg " style={{ height: '80vh' }}>
+      <div className="bg-white p-4 m-4 rounded-lg " style={{ minHeight: '80vh' }}>
         <div className="flex justify-between mb-2">
           <p className="mb-2 text-3xl text-gray-500">Robots</p>
           <div className="flex justify-end p-2">
