@@ -3,6 +3,7 @@ import Counters from "./Counter";
 import Logs_Table from "./Logs_Table";
 import Footer from "../../../../components/Common/Footer";
 import axios from "../../../../utils/axios";
+import { useSession } from 'next-auth/react';
 
 const Logs = () => {
     // const robotData = [
@@ -60,7 +61,7 @@ const Logs = () => {
     //         "message": "this is a log entry 2",
     //     }
     // ];
-
+    const {data: session} = useSession();
     const [robotLogs, setRobotLogs] = useState(null);
     const [robotData, setRobotData] = useState(null);
     const [showFeatures, setShowFeatures] = useState(false);
@@ -87,11 +88,17 @@ const Logs = () => {
     }, [robotData, robotLogs]);
 
 
-    const getRobotLogData = async () => {
+    const getRobotData = async () => {
         try {
             let robots = await axios.get('/api/robots/get');
-            console.log(robots.data.robots);
             setRobotData(robots.data.robots);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const getLogData = async (robotAddress, userId) => {
+        try {
             let res = await fetch('/api/elastic');
             setRobotLogs(await res.json())
         } catch (error) {
@@ -100,7 +107,7 @@ const Logs = () => {
     }
 
     useEffect(() => {
-        getRobotLogData();
+        getRobotData();
     }, []);
 
     const containerStyle = {
@@ -114,9 +121,9 @@ const Logs = () => {
     useEffect( () => {
         console.log(selectedRobot);
         if (selectedRobot) {
-            console.log(robotData)
-            console.log(robotLogs)
-           setLogsOfSelectedRobot(robotLogs.filter(log => log.robotAddress == selectedRobot));
+            console.log(selectedRobot, session.user.id)
+            getLogData(selectedRobot, session.user.id);
+            setLogsOfSelectedRobot(robotLogs);
         }
         console.log(logsOfSelectedRobot);
       }, [selectedRobot]);
