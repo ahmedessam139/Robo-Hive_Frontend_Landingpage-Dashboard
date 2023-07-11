@@ -6,61 +6,6 @@ import axios from "../../../../utils/axios";
 import { useSession } from 'next-auth/react';
 
 const Logs = () => {
-    // const robotData = [
-    //     {
-    //         "id": 12,
-    //         "createdAt": "2023-07-10T23:15:15.564Z",
-    //         "updatedAt": "2023-07-11T01:19:20.570Z",
-    //         "robotName": "DESKTOP-SVU2A36",
-    //         "robotAddress": "0A0027000011",
-    //         "socketID": null,
-    //         "connected": false,
-    //         "userID": 1
-    //     },
-    //     {
-    //         "id": 14,
-    //         "createdAt": "2023-07-11T00:28:35.056Z",
-    //         "updatedAt": "2023-07-11T02:10:05.941Z",
-    //         "robotName": "LAPTOP-TAUNF8FD",
-    //         "robotAddress": "001AFFDB45C2",
-    //         "socketID": null,
-    //         "connected": false,
-    //         "userID": 1
-    //     }
-    // ];
-
-    // const robotLogs = [
-    //     {
-    //         "logType": "INFO",
-    //         "name": "Labels",
-    //         "status": "Running",
-    //         "timestamp": "12345",
-    //         "message": "this is a log entry 2",
-    //         "robotAddress": '001AFFDB45C2'
-    //     },
-    //     {
-    //         "logType": "INFO",
-    //         "name": "Labels",
-    //         "status": "Running",
-    //         "timestamp": "12345",
-    //         "message": "this is a log entry 2",
-    //         "robotAddress": '001AFFDB45C2'
-    //     },
-    //     {
-    //         "logType": "INFO",
-    //         "name": "Labels",
-    //         "status": "Running",
-    //         "timestamp": "12345",
-    //         "message": "this is a log entry 2",
-    //         "robotAddress": '001AFFDB45C2'
-    //     },{
-    //         "logType": "INFO",
-    //         "name": "Labels",
-    //         "status": "Running",
-    //         "timestamp": "12345",
-    //         "message": "this is a log entry 2",
-    //     }
-    // ];
     const {data: session} = useSession();
     const [robotLogs, setRobotLogs] = useState([]);
     const [robotData, setRobotData] = useState(null);
@@ -99,7 +44,14 @@ const Logs = () => {
 
     const getLogData = async (robotAddress, userId) => {
         try {
-            let res = await fetch('/api/elastic');
+            let res = await fetch('/api/elastic', {
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify({robotAddress: robotAddress, userId: userId})
+            });
             setRobotLogs(await res.json())
         } catch (error) {
             console.log(error);
@@ -121,8 +73,7 @@ const Logs = () => {
     useEffect( () => {
         console.log(selectedRobot);
         if (selectedRobot) {
-            console.log(selectedRobot, session.user.id)
-            getLogData(selectedRobot, session.user.id);
+            getLogData(selectedRobot, session.userInfo.id);
             setLogsOfSelectedRobot(robotLogs);
         }
         console.log(logsOfSelectedRobot);
