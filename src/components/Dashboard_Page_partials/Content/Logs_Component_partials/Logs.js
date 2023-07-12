@@ -15,7 +15,6 @@ const Logs = () => {
     const [selectedRobot, setSelectedRobot] = useState(null);
     const [logsOfSelectedRobot, setLogsOfSelectedRobot] = useState([]);
 
-
     const getRobotData = async () => {
         try {
             let robots = await axios.get('/api/robots/get');
@@ -58,16 +57,22 @@ const Logs = () => {
     useEffect(() => {
         if (robotLogs) {
             setLogsOfSelectedRobot(robotLogs);
-        }
-        else {
+        } else {
             setLogsOfSelectedRobot([]);
         }
     }, [robotLogs]);
 
-    if (selectedRobot && session.userInfo.id) {
-        setInterval(getLogData(selectedRobot, session.userInfo.id), 5000);
-    }
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (selectedRobot && session.userInfo.id) {
+                getLogData(selectedRobot, session.userInfo.id);
+            }
+        }, 5000);
 
+        return () => {
+            clearInterval(interval);
+        };
+    }, [selectedRobot, session.userInfo.id]);
 
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
@@ -94,8 +99,6 @@ const Logs = () => {
         transition: 'margin-top 700ms  ease-out, opacity 700ms ease-out',
     };
 
-
-
     if (!robotData) {
         return (
             <div className={`mt-10 h-96 w-full flex justify-center items-center`}>
@@ -111,7 +114,6 @@ const Logs = () => {
             </div>
         )
     }
-
 }
 
 export default Logs;
