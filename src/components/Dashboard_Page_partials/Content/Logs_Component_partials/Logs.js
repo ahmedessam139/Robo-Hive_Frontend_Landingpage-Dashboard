@@ -44,11 +44,14 @@ const Logs = () => {
       
       useEffect(() => {
         // Initial call
+        if(robotData && session){
         getLogData(selectedRobot, session.userInfo.id);
-      
+        }
         // Call the function every second
         const interval = setInterval(() => {
-            getLogData(selectedRobot, session.userInfo.id);
+            if(robotData && session){
+                getLogData(selectedRobot, session.userInfo.id);
+            }
         }, 1000);
       
         // Clean up the interval on component unmount
