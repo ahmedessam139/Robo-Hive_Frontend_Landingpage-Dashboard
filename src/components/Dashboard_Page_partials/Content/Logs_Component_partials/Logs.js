@@ -65,7 +65,7 @@ const Logs = () => {
     }, [robotLogs]);
 
     if (selectedRobot && session.userInfo.id) {
-        setInterval(getLogData(selectedRobot, session.userInfo.id), 1000);
+        setInterval(getLogData(selectedRobot, session.userInfo.id), 5000);
     }
 
 
