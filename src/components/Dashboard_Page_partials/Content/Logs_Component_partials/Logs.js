@@ -27,24 +27,36 @@ const Logs = () => {
 
     const getLogData = async (robotAddress, userId) => {
         try {
-            const response = await axios.post('/api/elastic', {
-                robotAddress: robotAddress,
-                userId: userId
-            }, {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
-            });
-            setRobotLogs(response.data);
+          const response = await axios.post('/api/elastic', {
+            robotAddress: robotAddress,
+            userId: userId
+          }, {
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            }
+          });
+          setRobotLogs(response.data);
         } catch (error) {
-            console.log(error);
+          console.log(error);
         }
-    };
-
-    useEffect(() => {
-        getRobotData();
-    }, []);
+      };
+      
+      useEffect(() => {
+        // Initial call
+        getLogData();
+      
+        // Call the function every second
+        const interval = setInterval(() => {
+          getLogData();
+        }, 1000);
+      
+        // Clean up the interval on component unmount
+        return () => {
+          clearInterval(interval);
+        };
+      }, []);
+      
 
     useEffect(() => {
         console.log(selectedRobot);
