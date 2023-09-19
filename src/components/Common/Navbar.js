@@ -36,17 +36,17 @@ export default function Navbar() {
                     </a>
                 </li>
                 <li className="mx-3 my-2 md:m-3">
-                    <a href="/partners" className="text-gray-500 hover:text-blue-500 transition-all duration-700 font-medium">
+                    <a href="/" className="text-gray-500 hover:text-blue-500 transition-all duration-700 font-medium">
                         Partners
                     </a>
                 </li>
                 <li className="mx-3 my-2 md:m-3">
-                    <a href="/aboutus" className="text-gray-500 hover:text-blue-500 transition-all duration-700 font-medium">
+                    <a href="/" className="text-gray-500 hover:text-blue-500 transition-all duration-700 font-medium">
                         About Us
                     </a>
                 </li>
                 <li className="mx-3 my-2 md:m-3">
-                    <a href="/download" className="text-gray-500 hover:text-blue-500   transition-all duration-700 font-medium ">
+                    <a href="/" className="text-gray-500 hover:text-blue-500   transition-all duration-700 font-medium ">
                         Download <FaDownload className="inline-block align-text-bottom ml-2 mb-1" />
                     </a>
                 </li>

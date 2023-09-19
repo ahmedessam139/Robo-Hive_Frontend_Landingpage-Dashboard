@@ -3,9 +3,11 @@ import Typography from '@mui/material/Typography';
 import Typed from 'react-typed';
 import { FaStar } from 'react-icons/fa';
 import { BiLogInCircle } from 'react-icons/bi';
-import { signIn } from 'next-auth/react';
+import { useRouter } from "next/router";
 
 export default function Hero() {
+
+    const router = useRouter();
 
     return (
         <>
@@ -30,12 +32,12 @@ export default function Hero() {
                                     <a href="#" target="_blank" rel="noopener noreferrer" className="flex items-center gap-x-2 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 font-medium transition-all duration-700" 
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            signIn("keycloak", { callbackUrl: "/" });
+                                            router.push("/dashboard/home");
                                         }}>
                                     <BiLogInCircle className="inline-block" />
                                     Get Started
                                     </a>
-                                    <a href="https://github.com/your-github-repo" target="_blank" rel="noopener noreferrer" className="flex items-center gap-x-2 px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400 text-gray-800 hover:text-gray-900 font-medium transition-all duration-700">
+                                    <a href="https://github.com/ahmedessam139/Robo-Hive" target="_blank" rel="noopener noreferrer" className="flex items-center gap-x-2 px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400 text-gray-800 hover:text-gray-900 font-medium transition-all duration-700">
                                     <FaStar className="inline-block" color="#FFD700" />
                                         Star On GitHub
                                     </a>
