@@ -10,7 +10,34 @@ const Package = () => {
 
     const getData = async () => {
         try {
-            const res = await axios.get('/api/packages/user/');
+            // const res = await axios.get('/api/packages/user/');
+            // add dummy data
+            const res = {
+                data: {
+                    "counters": {
+                        "packagesNumber": 23,
+                        "packagesWithJobs": 12,
+                        "dailyPackages": 11,
+                    },
+                    "packages": [{
+                        "packageId": 1,
+                        "packageName": "Package 1",
+                        "description": "Description 1",
+                        "createdDate": "2021-07-01",
+                        "downloadUrl": "https://www.google.com",
+
+                    },
+                    {
+                        "packageId": 4,
+                        "packageName": "Package 2",
+                        "description": "Description 2",
+                        "createdDate": "2021-07-02",
+                        "downloadUrl": "https://www.google.com",
+                    },
+                    ],
+
+                }
+            }
             setPackageData(res.data);
         } catch (err) {
             console.log(err)
