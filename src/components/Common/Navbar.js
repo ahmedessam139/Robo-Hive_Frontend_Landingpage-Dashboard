@@ -54,7 +54,7 @@ export default function Navbar() {
                     <button type="button" className="flex items-center gap-x-2 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 font-medium transition-all duration-700" 
                         onClick={(e) => {
                             e.preventDefault();
-                            signIn("keycloak", { callbackUrl: "/" });
+                            router.push("/dashboard/home");
                         }}>
                     <BiLogInCircle className="inline-block" />
     

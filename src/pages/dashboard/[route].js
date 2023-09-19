@@ -2,7 +2,6 @@ import React, { useState, useEffect, use } from 'react';
 import { Suspense } from 'react';
 import { GoSidebarExpand } from 'react-icons/go';
 import { useRouter } from 'next/router';
-import { getSession } from 'next-auth/react';
 import Sidebar from '../../components/Dashboard_Page_partials/Sidebar/Sidebar';
 import styles from './Dashboard.module.css';
 import Loader from '../../components/Common/Loader';
@@ -121,22 +120,7 @@ const Dashboard = () => {
   );
 };
 
-export async function getServerSideProps(context) {
-  const session = await getSession(context);
 
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {}
-  }
-}
 
 
 

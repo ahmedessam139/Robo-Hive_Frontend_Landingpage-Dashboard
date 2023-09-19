@@ -15,7 +15,29 @@ export default function Home() {
     const getHomeData = async () => {
         try {
 
-            let res = await axios.get('/api/home');
+            // let res = await axios.get('/api/home');
+            //add dummy data
+            let res = {
+                data: {
+                    counters: {
+                        jobs: 100,
+                        robots: 10,
+                        tenants: 5,
+                        packages: 10,
+                    },
+                    jobs: {
+                        total: 100,
+                        executed: 50,
+                        cancelled: 20,
+                        pending: 30,
+                    },
+                    robots: {
+                        total: 10,
+                        connected: 8,
+                        disconnectedRobots: 2,
+                    },
+                }
+            }
             setHomeData(res.data);
 
         } catch (error) {
