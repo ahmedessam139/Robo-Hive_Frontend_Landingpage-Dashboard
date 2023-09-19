@@ -110,9 +110,9 @@ const Robots_Table = ({ robots , getRobots}) => {
             <tbody className="text-gray-600 text-sm font-light">
               {robots.map(robot => (
                 <tr key={robot.id} className="border-b border-gray-200 hover:bg-gray-100">
-                  <td className="py-3 px-6 text-center">{robot.id}</td>
+                  <td className="py-3 px-6 text-center">{robot.robotId}</td>
                   <td className="py-3 px-6 text-center">{robot.robotAddress}</td>
-                  <td className="py-3 px-6 text-center">{robot.createdAt}</td>
+                  <td className="py-3 px-6 text-center">{robot.joinedAt}</td>
                   <td className="py-3 px-6 text-center">
                     {robot.connected && (
                       <div className="flex items-center justify-center">

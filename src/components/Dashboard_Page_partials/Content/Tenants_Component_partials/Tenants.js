@@ -12,7 +12,22 @@ const Tenants = () => {
 
     const getData = async () => {
         try {
-            const res = await axios.get('/api/authenticate/tenant');
+            // const res = await axios.get('/api/authenticate/tenant');
+            // add dummy data
+            const res = {
+                data: [
+
+                    {
+                        "tenantId": 1,
+                        "username": "Tenant 1",
+                        "role": "Admin",
+                        "creationTime": "2021-07-01",
+                        "updateTime": "2021-07-01", 
+
+                    },
+                ],
+
+            }
             setTenantsData(res.data);
         } catch (err) {
             console.log(err)

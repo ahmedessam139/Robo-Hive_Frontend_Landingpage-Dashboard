@@ -185,7 +185,7 @@ const Tenants_Table = ({ tenants , getData}) => {
         <div className="flex justify-between mb-2">
           <p className="mb-2 text-3xl text-gray-500">Tenants</p>
           <div className="flex justify-end p-2">
-            <button className="bg-red-400 hover:bg-red-600 mr-3 text-white font-bold py-2 px-4 rounded-full" onClick={handleAddOne}>
+            <button className="bg-red-400 hover:bg-red-600 mr-3 text-white font-bold py-2 px-4 rounded-full" >
               Add One <FaPlus className="inline-block " />
             </button>
 
@@ -237,12 +237,12 @@ const Tenants_Table = ({ tenants , getData}) => {
                     <FaEdit
                       size={16}
                       className="text-blue-500 cursor-pointer"
-                      onClick={() => handleUpdate(tenant.tenantId)}
+                      // onClick={}
                     />
                     <FaTrashAlt
                       size={16}
                       className="text-red-500 cursor-pointer"
-                      onClick={() => handleDelete(tenant.tenantId)}
+                      // onClick={}
                     />
                   </td>
                 </tr>

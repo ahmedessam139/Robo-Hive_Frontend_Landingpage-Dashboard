@@ -6,36 +6,36 @@ import axios from "../../../../utils/axios";
 import Loader from "@/components/Common/Loader";
 
 const Robots = () => {
-    // const robotData = {
-    //     "counters": {
-    //         "robots": 10,
-    //         "connectedRobots": 5,
-    //         "disconnectedRobots": 5
-    //     },
-    //     "robots": [
-    //         {
-    //             "robotId": 1,
-    //             "robotAddress": '12.235.2.2',
-    //             "joinedAt": "2021-07-01T00:00:00.000Z",
-    //             "status": "connected"
+    const robotDummyData = {
+        "counters": {
+            "robots": 10,
+            "connected": 5,
+            "disconnectedRobots": 5
+        },
+        "robots": [
+            {
+                "robotId": 1,
+                "robotAddress": '12.235.2.2',
+                "joinedAt": "2021-07-01T00:00:00.000Z",
+                "status": "connected"
 
-    //         },
-    //         {
-    //             "robotId": 2,
-    //             "robotAddress": '243.34.34.4',
-    //             "joinedAt": "2021-07-01T00:00:00.000Z",
-    //             "status": "disconnected"
+            },
+            {
+                "robotId": 2,
+                "robotAddress": '243.34.34.4',
+                "joinedAt": "2021-07-01T00:00:00.000Z",
+                "status": "disconnected"
 
-    //         },
-    //         {
-    //             "robotId": 3,
-    //             "robotAddress": '324234.34.34.4',
-    //             "joinedAt": "2021-07-01T00:00:00.000Z",
-    //             "status": "connected"
+            },
+            {
+                "robotId": 3,
+                "robotAddress": '324234.34.34.4',
+                "joinedAt": "2021-07-01T00:00:00.000Z",
+                "status": "connected"
 
-    //         },
-    //     ]
-    // };
+            },
+        ]
+    };
 
     const [robotData, setRobotData] = useState(null);
     const [showFeatures, setShowFeatures] = useState(false);
@@ -44,9 +44,9 @@ const Robots = () => {
     const getRobotData = async () => {
         try {
 
-            let res = await axios.get('/api/robots/get');
-            console.log(res.data);
-            setRobotData(res.data);
+            // let res = await axios.get('/api/robots/get');
+            // console.log(res.data);
+            setRobotData(robotDummyData);
 
         } catch (error) {
             console.log(error);
