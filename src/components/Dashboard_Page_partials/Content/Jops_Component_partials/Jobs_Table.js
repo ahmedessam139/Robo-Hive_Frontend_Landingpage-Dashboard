@@ -92,7 +92,7 @@ const Jobs_Table = ({ jobs, robots, packages ,getJops }) => {
 
   const filterJobs = jobs.filter((job) => {
     return (
-      job.robot.robotName.toLowerCase().includes(searchTerm.toLowerCase())
+      job.robotName.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
 
@@ -248,8 +248,8 @@ const Jobs_Table = ({ jobs, robots, packages ,getJops }) => {
               {filterJobs.map((job) => (
                 <tr key={job.id} className="border-b border-gray-200 hover:bg-gray-100">
                   <td className="py-3 px-6 text-center">{job.id}</td>
-                  <td className="py-3 px-6 text-center">{job.robot.robotName}</td>
-                  <td className="py-3 px-6 text-center">{job.package.name}</td>
+                  <td className="py-3 px-6 text-center">{job.robotName}</td>
+                  <td className="py-3 px-6 text-center">{job.packageName}</td>
                   <td className="py-3 px-6 text-center">{job.date}</td>
                   <td className="py-3 px-6 text-center">{job.time}</td>
                   <td className="py-3 px-6 text-center">
